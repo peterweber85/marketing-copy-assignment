@@ -156,7 +156,7 @@ def _(mo):
     ## 3. Pipeline
 
     A two-stage solver chain (inspect-ai `Solver`s). Both stages are individually testable;
-    36 offline tests run without an API key using inspect-ai's `mockllm/model` provider.
+    46 offline tests run without an API key using inspect-ai's `mockllm/model` provider.
 
     ```
     PropertyInput (structured JSON)
@@ -213,9 +213,8 @@ def _(mo):
     mo.md("""
     ## 4. Evaluation Suite
 
-    **Five independent scorers**, each targeting a different failure mode. The job
-    description names four axes — **factuality, grounding, robustness, user impact** — and
-    each scorer maps to one or more:
+    **Five independent scorers**, each targeting a different failure mode. Each of them maps
+    to one or more of — **factuality, grounding, robustness, user impact**:
 
     | Scorer | Type | Scale | Axis |
     |---|---|---|---|
@@ -713,22 +712,42 @@ def _(mo):
     `scrub_checkin_prose()` in `ingest.py` removed the contradiction before the model saw it.
     The grounding std on fixture 109 dropped from ≈0.05 to 0.000.
 
-    ### What we'd do with more time
+    ### What I'd do with more time
 
     **Human eval calibration.** The faithfulness judge has ~0.7–0.9 std — the Sonnet judge
-    disagrees with itself across runs. Calibrating against a human panel on 30–50 samples
-    would tell us whether that variance correlates with human judgement or is pure noise.
+    disagrees with itself across runs. The golden dataset uses the author's annotations, which
+    may have blind spots. Recruiting a panel of 3–5 Lodgify domain experts to score 50–100
+    generated samples independently would:
+    - Expose whether the judge's variance reflects human disagreement (legitimate) or noise
+    - Identify failure modes the author's traps didn't anticipate
+    - Provide ground truth to close the residual MAD gap (judge gives ~3.7 to samples humans rate 5)
+    - Enable a re-tuned rubric with anchor examples that match human standards, not just Sonnet's
 
-    **A/B testing in production.** v5 outperforms v1 on proxy metrics. Whether it outperforms
-    on *booking intent* requires a shadow traffic split and downstream measurement.
+    **Drive prompt iteration off user impact.** So far `booking_intent_scorer` is reported but no
+    prompt change targeted it. The v1–v5 arc focused on grounding/faithfulness. A v6 could
+    explicitly aim to lift booking intent (urgency, scarcity, specificity) *without* sacrificing
+    faithfulness — an interesting multi-axis optimization problem: does "premium experience"
+    language increase booking intent while the faithfulness judge still passes it?
 
-    **Production monitoring.** The grounding scorer is cheap enough to run on every generated
-    listing. A score below 0.90 → flag for human review before publication. The faithfulness
-    scorer is more expensive (one Sonnet call per listing) but could run nightly on a sample.
+    **A/B testing in production.** v5 outperforms v1 on all proxy metrics (grounding, faithfulness,
+    quality). Whether it translates to *real* business outcome (click-through, booking rate,
+    conversion value) is unknown. A shadow traffic split — 50% v1, 50% v5 — for 2–4 weeks would
+    measure actual guest behavior. If v5 lifts booking by 5–10%, that justifies the stricter
+    prompt constraint. If not, it reveals that the evals are optimizing for the wrong thing.
 
-    **Prompt as configuration.** Prompts live in `prompts/vN.txt` — plain text, no Python
-    required. A lightweight review workflow: propose a change, run `inspect eval`, see the
-    before/after score delta in `inspect view`. This is the EDD loop operationalised.
+    **Production monitoring & alerting.** The grounding scorer is deterministic (rule-based, no
+    LLM) and runs in <100ms. Ideal for real-time monitoring: every generated listing gets
+    grounding scored; anything <0.95 flags for human review before publication. The faithfulness
+    and quality scorers cost more (one Sonnet call each per property), so run them nightly on a
+    random sample of published listings to detect prompt drift or model degradation over time.
+
+    **Prompt-as-config operationalization.** Currently prompts are versioned by hand (v1.txt, v2.txt, etc.)
+    and prompt changes require a human to write, test, and commit. In production, you'd want:
+    - A lightweight prompt-editing UI where content/product managers propose changes (no Python)
+    - Automated eval runs on proposed prompts against the golden set + recent prod samples
+    - Side-by-side `inspect view` comparison of current vs proposed before/after metrics
+    - Auto-commit+deploy once a change passes the golden set (grounding 1.0, faithfulness MAD < 0.7)
+    This is the EDD loop operationalised: metrics drive every prompt change, nothing ships untested.
     """)
     return
 
@@ -820,14 +839,14 @@ def _(glob, read_eval_log, statistics):
 @app.cell
 def _(mo, calib_rows, faith_mad, qual_mad, good_f_avg, bad_f_avg, golden_log):
     if not golden_log:
-        mo.callout(
+        calib_display = mo.callout(
             mo.md("No golden eval log found. Run: `uv run inspect eval eval_pipeline.py@golden_eval --model anthropic/claude-sonnet-4-6`"),
             kind="warn",
         )
     else:
         f_kind = "success" if faith_mad and faith_mad < 0.7 else ("warn" if faith_mad and faith_mad < 1.0 else "danger")
         q_kind = "success" if qual_mad and qual_mad < 0.7 else ("warn" if qual_mad and qual_mad < 1.0 else "danger")
-        mo.vstack([
+        calib_display = mo.vstack([
             mo.hstack([
                 mo.callout(mo.md(f"**Faithfulness MAD: {faith_mad}**\n\nTarget < 0.7"), kind=f_kind),
                 mo.callout(mo.md(f"**Quality MAD: {qual_mad}**\n\nTarget < 0.7"), kind=q_kind),
@@ -857,7 +876,7 @@ def _(mo, calib_rows, faith_mad, qual_mad, good_f_avg, bad_f_avg, golden_log):
                 kind="success" if (faith_mad and faith_mad < 1.0) else "warn",
             ),
         ])
-    return ()
+    return calib_display
 
 
 if __name__ == "__main__":
