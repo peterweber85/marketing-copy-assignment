@@ -11,19 +11,66 @@ Supporting code lives in the `lodgify/` package; inspect-ai task definitions are
 
 ## Quick start
 
+**Setup:**
 ```bash
-uv sync                            # install dependencies
-cp .env.example .env               # then add your ANTHROPIC_API_KEY to .env
-uv run marimo edit evals.py        # open the notebook
+uv sync
+cp .env.example .env   # add ANTHROPIC_API_KEY — only needed to regenerate logs or run the live generation cell
 ```
 
-An API key is only needed to regenerate logs or run the live generation cell. Everything
-else — EDD arc, reliability, calibration — loads from committed `.eval` logs and renders
-without one.
-
+**Open the notebook (the main deliverable):**
 ```bash
-uv run pytest tests/ -v            # 46 offline tests, no API key
-uv run inspect view --log-dir logs/ # browse committed eval logs in the browser
+uv run marimo edit evals.py      # interactive
+uv run marimo run evals.py       # read-only
+```
+The notebook reads the committed `.eval` logs, so the EDD arc, reliability, and
+calibration sections render **without an API key**. One cell generates live copy with
+Haiku for a single fixture *if* a key is present, and is skipped otherwise.
+
+**Run the tests (offline, no API key):**
+```bash
+uv run pytest tests/ -v          # 46 tests
+```
+
+**View committed eval results in the browser (no API key):**
+```bash
+uv run inspect view --log-dir logs/
+```
+- **Left panel:** list of eval runs (task name + timestamp).
+- **Samples tab:** one row per property/variant. Click to expand the generated copy and
+  each scorer's verdict + explanation. `grounding`/`completeness` are 0–1; the three LLM
+  judges are 1–5.
+- **Usage tab:** token counts per model (Haiku for generation, Sonnet for judging).
+
+Key runs to compare:
+
+| Run | What to look for |
+|---|---|
+| `stub_eval variant=bad` vs `good` | scorers discriminate bad (grounding 0.64, faith 1) from good (grounding 1.0) |
+| `listing_eval v1` vs `v2` | faithfulness jumps 2.89 → 4.11 (anti-embellishment fix) |
+| `listing_eval v2 → v3 → v4` | grounding climbs to 1.000 |
+| `reliability_eval v4` vs `v5` | grounding std 0.064 → 0.000 (fixture 109 robustness fix) |
+| `golden_eval` (uncalibrated vs calibrated) | faithfulness MAD 1.22 → 0.94; good avg 3.67 vs bad avg 1.44 |
+
+All committed logs carry the full five scorers, except the **uncalibrated `golden_eval`
+baseline** (the earlier of the two golden logs), which is kept deliberately as the
+"before-calibration" reference for the MAD comparison.
+
+**Regenerate eval logs (requires API key):**
+```bash
+# Validate scorers against stubs (EDD discipline)
+uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=bad
+uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=good
+
+# The grounding arc — run each prompt version
+uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v2
+uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
+
+# Robustness (3 epochs per fixture) — compare v4 (std>0) vs v5 (std=0)
+uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v4
+uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
+
+# Judge calibration against the golden dataset (MAD)
+uv run inspect eval eval_pipeline.py@golden_eval --model anthropic/claude-sonnet-4-6
 ```
 
 ---
@@ -189,77 +236,6 @@ Maps directly to the brief's four sections, validated by Pydantic on generation:
 `hero_headline` (10–90 chars) · `highlights` (3–6 items) · `about_this_place` (120–1200
 chars) · `amenity_descriptions` (each with an `amenity_code` that must be one of the
 property's input codes).
-
----
-
-## How to run
-
-**Setup (one time):**
-```bash
-uv sync
-cp .env.example .env  # add ANTHROPIC_API_KEY — only needed to regenerate logs / run the live notebook cell
-```
-
-**Run the tests (offline, no API key):**
-```bash
-uv run pytest tests/ -v          # 46 tests
-```
-
-**Open the notebook (the main deliverable):**
-```bash
-uv run marimo edit evals.py      # interactive
-uv run marimo run evals.py       # read-only
-```
-The notebook reads the committed `.eval` logs, so the EDD arc, reliability, and calibration
-sections render **without an API key**. One cell generates live copy with Haiku for a single
-fixture *if* a key is present, and is skipped otherwise.
-
-
-**View the committed eval results (offline, no API key):**
-```bash
-uv run inspect view --log-dir logs/
-```
-
-**Regenerate eval logs (requires API key in `.env`):**
-```bash
-# Validate scorers against stubs (EDD discipline)
-uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=bad
-uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=good
-
-# The grounding arc — run each prompt version
-uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v2
-uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
-
-# Robustness (3 epochs per fixture) — compare v4 (std>0) vs v5 (std=0)
-uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v4
-uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
-
-# Judge calibration against the golden dataset (MAD)
-uv run inspect eval eval_pipeline.py@golden_eval --model anthropic/claude-sonnet-4-6
-```
-
-### Reading the inspect-view logs
-
-In the browser UI (`inspect view`):
-- **Left panel:** list of eval runs (task name + timestamp).
-- **Samples tab:** one row per property/variant. Click to expand the generated copy and
-  each scorer's verdict + explanation. `grounding`/`completeness` are 0–1; the three LLM
-  judges are 1–5.
-- **Usage tab:** token counts per model (Haiku for generation, Sonnet for judging).
-
-Key runs to compare:
-
-| Run | What to look for |
-|---|---|
-| `stub_eval variant=bad` vs `good` | scorers discriminate bad (grounding 0.64, faith 1) from good (grounding 1.0) |
-| `listing_eval v1` vs `v2` | faithfulness jumps 2.89 → 4.11 (anti-embellishment fix) |
-| `listing_eval v2 → v3 → v4` | grounding climbs to 1.000 |
-| `reliability_eval v4` vs `v5` | grounding std 0.064 → 0.000 (fixture 109 robustness fix) |
-| `golden_eval` (uncalibrated vs calibrated) | faithfulness MAD 1.22 → 0.94; good avg 3.67 vs bad avg 1.44 |
-
-All committed logs carry the full five scorers, except the **uncalibrated `golden_eval`
-baseline** (the earlier of the two golden logs), which is kept deliberately as the
-"before-calibration" reference for the MAD comparison.
 
 ---
 
