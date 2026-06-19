@@ -12,13 +12,14 @@ Supporting code lives in the `lodgify/` package; inspect-ai task definitions are
 ## Quick start
 
 ```bash
-uv sync                            # install dependencies (no API key needed for this)
-uv run marimo edit evals.py        # open the notebook — reads committed logs, no key required
+uv sync                            # install dependencies
+cp .env.example .env               # then add your ANTHROPIC_API_KEY to .env
+uv run marimo edit evals.py        # open the notebook
 ```
 
-Everything in the notebook — EDD arc, reliability, calibration — loads from committed
-`.eval` logs and renders without an API key. One cell runs a live generation with Haiku
-*if* `ANTHROPIC_API_KEY` is set in `.env`; it is skipped otherwise.
+An API key is only needed to regenerate logs or run the live generation cell. Everything
+else — EDD arc, reliability, calibration — loads from committed `.eval` logs and renders
+without one.
 
 ```bash
 uv run pytest tests/ -v            # 46 offline tests, no API key
