@@ -1,0 +1,51 @@
+{
+  "property_id": 109,
+
+  "good": {
+    "human_notes": "Check-in is 7 PM — good copy states this precisely. No 'flexible check-in' claim despite the owner headline. Sea view and terrace correctly stated.",
+    "human_scores": { "faithfulness": 5, "quality": 4 },
+    "hero_headline": "Top-Floor Apartment with Rooftop Terrace and Sea Views, Málaga",
+    "highlights": [
+      "Private rooftop terrace with sea views over the bay",
+      "2 bedrooms for up to 4 guests",
+      "Elevator access — top floor with no stairs",
+      "Check-in from 7 PM, check-out 10 AM"
+    ],
+    "about_this_place": "Ático Dorado sits on the top floor of a Málaga building, with a private rooftop terrace overlooking the bay. Two bedrooms sleep four guests across one bathroom. The apartment has air conditioning, a fully equipped kitchen, and a flat-screen TV. Sea views are visible from both the terrace and the living area. An elevator makes arrival with luggage easy. Free cancellation up to 72 hours before check-in. Full payment at booking. Damage deposit €200, refunded within 7 days. Check-in from 7 PM, check-out 10 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the apartment." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in all rooms." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen." },
+      { "amenity_code": "TV", "label": "TV", "description": "Flat-screen TV in the living room." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Private rooftop terrace with sea views." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Views of Málaga bay from the terrace and living area." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Elevator to the top floor." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Claims 'flexible check-in any time — arrive whenever suits you' when house_rules.check_in_time is '7 PM'. Also claims 'free parking' which is not in the amenities list.",
+    "human_scores": { "faithfulness": 1, "quality": 4 },
+    "intentional_failures": [
+      "'flexible check-in — arrive any time day or night' — check_in_time is '7 PM', a specific fixed time",
+      "'free parking included' — FreeParking is not in the amenities list for this property"
+    ],
+    "hero_headline": "Flexible Check-In Rooftop Penthouse with Sea Views, Málaga",
+    "highlights": [
+      "Flexible check-in — arrive any time, day or night, at your convenience",
+      "Breathtaking rooftop terrace with panoramic sea views",
+      "Free parking included for the duration of your stay",
+      "2 bedrooms for up to 4 guests — elevator access to the top floor"
+    ],
+    "about_this_place": "Ático Dorado offers the ultimate in flexibility — check in whenever suits you, day or night, with no restrictions on arrival time. This top-floor penthouse features a breathtaking rooftop terrace with panoramic views of the Málaga bay and coastline. Two bedrooms sleep four guests comfortably, and free parking is included. The elevator whisks you to the top floor without carrying a bag up a single stair.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "High-speed Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Climate control in all rooms." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen." },
+      { "amenity_code": "TV", "label": "TV", "description": "Smart TV in the living room." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Expansive rooftop terrace with panoramic sea views." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Panoramic bay views from every angle of the terrace." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Private lift access to the penthouse." }
+    ]
+  }
+}

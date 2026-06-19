@@ -1,0 +1,51 @@
+{
+  "property_id": 105,
+
+  "good": {
+    "human_notes": "All three policies are null — good copy mentions none of them. Balcony, marina view, 2 bedrooms for 5 guests all correctly stated.",
+    "human_scores": { "faithfulness": 5, "quality": 4 },
+    "hero_headline": "Marina View Two-Bedroom Apartment in Valencia",
+    "highlights": [
+      "Balcony with marina views — ideal for watching the boats",
+      "2 bedrooms for up to 5 guests",
+      "Free parking and elevator access",
+      "Five-minute walk to the beach"
+    ],
+    "about_this_place": "This two-bedroom apartment overlooks the marina in Valencia, with a balcony for watching the boats come and go. Two bedrooms sleep up to five guests across two bathrooms. The fully equipped kitchen, air conditioning, and free parking make it a practical base for exploring the city and the beach, just five minutes on foot. Check-in from 4 PM, check-out 11 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the apartment." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in all rooms." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Views over the marina from the living area and balcony." },
+      { "amenity_code": "Balcony", "label": "Balcony", "description": "Private balcony overlooking the marina." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Elevator access to the apartment." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free parking included for guests." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Invents 'free cancellation — book with confidence' when cancellation_policy is null. Also echoes 'award-winning interior design' from owner description not supported by structured data.",
+    "human_scores": { "faithfulness": 1, "quality": 3 },
+    "intentional_failures": [
+      "'free cancellation — book with confidence' — cancellation_policy is null, no such policy exists",
+      "'award-winning interior design' — from owner's marketing description, not a structured fact"
+    ],
+    "hero_headline": "Award-Winning Marina View Apartment in Valencia",
+    "highlights": [
+      "Award-winning interior design featured in leading travel publications",
+      "Free cancellation — book with complete confidence",
+      "Balcony with stunning marina views",
+      "Two bedrooms for up to five guests, beach in five minutes"
+    ],
+    "about_this_place": "This award-winning apartment has been celebrated in leading travel publications for its striking interior design. A private balcony frames views of the marina, and the beach is just a five-minute walk. Book with complete confidence — free cancellation is available up to the day of arrival. Two beautifully appointed bedrooms sleep up to five guests across two bathrooms, and free parking is included for the duration of your stay.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "High-speed Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Climate control in all rooms." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Gourmet kitchen with premium appliances." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Panoramic marina views from the living area and balcony." },
+      { "amenity_code": "Balcony", "label": "Balcony", "description": "Designer balcony terrace with harbour views." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Private lift access." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Complimentary secure parking." }
+    ]
+  }
+}

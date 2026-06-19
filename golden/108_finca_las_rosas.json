@@ -1,0 +1,53 @@
+{
+  "property_id": 108,
+
+  "good": {
+    "human_notes": "PetFriendly is NOT in the amenities list. Good copy describes the garden and outdoor spaces without claiming pet-friendliness, despite review anecdotes. Every amenity listed is in the data.",
+    "human_scores": { "faithfulness": 5, "quality": 5 },
+    "hero_headline": "Andalusian Finca with Pool in the Hills near Ronda",
+    "highlights": [
+      "Private swimming pool set among olive groves",
+      "4 bedrooms for up to 8 guests",
+      "Large garden, BBQ terrace, and outdoor dining area",
+      "Stunning Andalusian countryside with views toward Ronda"
+    ],
+    "about_this_place": "Finca las Rosas is a classic Andalusian finca set among olive groves outside Ronda. Four bedrooms sleep up to eight guests across two bathrooms. The large garden, swimming pool, and outdoor dining terrace are perfect for slow summer days, and the surrounding countryside offers excellent hiking. The town of Ronda and its famous gorge are a short drive away. 50% refund if cancelled 30 or more days before check-in. 30% deposit at booking, balance 30 days before arrival. Damage deposit €400. Check-in from 4 PM, check-out 10 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "SwimmingPool", "label": "Swimming pool", "description": "Private swimming pool set in the garden." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the finca." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in the bedrooms and living area." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "BBQGrill", "label": "BBQ grill", "description": "Outdoor BBQ grill on the terrace." },
+      { "amenity_code": "Garden", "label": "Garden", "description": "Large garden with olive trees and an outdoor dining area." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free parking in the grounds." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Shaded terrace for outdoor dining and relaxing." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Claims 'pet-friendly — dogs welcome' based on review anecdotes, but PetFriendly is not in the amenities list. Also invents '30 minutes from Marbella' not stated in the data.",
+    "human_scores": { "faithfulness": 2, "quality": 4 },
+    "intentional_failures": [
+      "'pet-friendly — dogs warmly welcome' — PetFriendly is not in the amenities list; reviews mention dogs but that is not an authoritative source",
+      "'30 minutes from Marbella's beaches' — location is Ronda, no proximity to Marbella stated in data"
+    ],
+    "hero_headline": "Pet-Friendly Andalusian Finca with Pool near Ronda",
+    "highlights": [
+      "Pet-friendly — dogs warmly welcome in the spacious garden",
+      "Private pool among olive groves, perfect for hot Andalusian days",
+      "30 minutes from Marbella's beaches for the best of both worlds",
+      "4 bedrooms for up to 8 guests with outdoor BBQ terrace"
+    ],
+    "about_this_place": "Finca las Rosas is the perfect Andalusian retreat for families and pet owners alike — dogs are warmly welcome to run free in the spacious garden and surrounding olive groves. Four bedrooms sleep eight guests, and the private swimming pool is the heart of long, lazy summer days. The town of Ronda is a short drive away, while Marbella's beaches are just 30 minutes in the other direction — giving you the best of mountain and coast in one stay.",
+    "amenity_descriptions": [
+      { "amenity_code": "SwimmingPool", "label": "Swimming pool", "description": "Private pool surrounded by olive trees — the ideal spot for a hot afternoon." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning throughout." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen." },
+      { "amenity_code": "BBQGrill", "label": "BBQ grill", "description": "Traditional outdoor BBQ for Andalusian evenings." },
+      { "amenity_code": "Garden", "label": "Garden", "description": "Expansive garden with room for children and dogs to roam freely." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Ample free parking in the grounds." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Shaded terrace overlooking the garden and countryside." }
+    ]
+  }
+}

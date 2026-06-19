@@ -1,0 +1,40 @@
+{
+  "property_id": 108,
+  "property_name": "Finca las Rosas",
+  "property_type": "Villa",
+  "description": {
+    "name": "Finca las Rosas",
+    "headline": "Rural Andalusian Finca with Pool, Near Ronda",
+    "description": "<p>A classic Andalusian finca set among olive groves outside Ronda. The large garden, swimming pool, and outdoor dining area are perfect for slow summer days. The surrounding countryside offers excellent hiking.</p>"
+  },
+  "amenities": ["SwimmingPool", "WiFi", "AirConditioning", "Kitchen", "BBQGrill", "Garden", "FreeParking", "Terrace"],
+  "image_urls": ["https://example.com/finca/1.jpg", "https://example.com/finca/2.jpg"],
+  "reviews": [
+    "We brought our two dogs — they absolutely loved the garden. So much space to run. The pool was perfect.",
+    "Pet paradise! Our labrador had the time of his life here. The finca is gorgeous and very dog-friendly.",
+    "Came with the family and our rescue greyhound. The terrace was a favourite spot for all of us, two-legged and four-legged alike.",
+    "Great property. Beautiful setting. Our puppy approved of the garden."
+  ],
+  "num_of_reviews": 41,
+  "average_review_score": 4.71,
+  "rental_info": {
+    "max_guests": 8,
+    "bedrooms": 4,
+    "bathrooms": 2
+  },
+  "location": {
+    "city": "Ronda",
+    "country": "Spain",
+    "latitude": 36.7432,
+    "longitude": -5.1672
+  },
+  "policies": {
+    "cancellation_policy": "50% refund if cancelled 30 or more days before check-in.",
+    "payment_schedule": "30% deposit at booking, balance 30 days before arrival.",
+    "damage_deposit": "€400, refunded within 5 days of checkout."
+  },
+  "house_rules": {
+    "check_in_time": "4 PM",
+    "check_out_time": "10 AM"
+  }
+}

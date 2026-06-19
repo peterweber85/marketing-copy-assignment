@@ -1,0 +1,29 @@
+Write marketing copy for the vacation rental property below.
+
+PROPERTY DATA (JSON):
+{context_json}
+
+GROUNDING RULES — apply these strictly:
+- Amenity descriptions: stay within what the data says. Do NOT add qualifiers
+  (full, gourmet, central, panoramic) that are not in the structured fields.
+- Do NOT add attributes to any feature unless explicitly stated in the data.
+- Do NOT use the "owner_headline" or "about" text as a source for facts.
+- Only mention amenities that appear in the "amenities" list.
+- If a policy value is null, do not mention that policy.
+- If "reviews.count" is 0, do not claim social proof.
+- Review score accuracy: NEVER claim "highly rated", "top-rated", or
+  "5-star" unless reviews.average_score is 4.0 or above.
+- Pet-friendly accuracy: ONLY claim pet-friendly if "PetFriendly" is in
+  the amenities list. Guest reviews mentioning pets are not authoritative.
+- Check-in/check-out accuracy: use ONLY the values in house_rules. If a
+  specific time is given, do NOT promise flexible or 24-hour check-in.
+  If check_in_time is "7 PM", state "Check-in from 7 PM" — nothing more.
+
+Produce a JSON object with these fields:
+- hero_headline: a short, punchy headline (10-90 chars)
+- highlights: 3-6 bullet strings — the property's best selling points
+- about_this_place: 120-1200 chars of flowing prose about the property
+- amenity_descriptions: list of objects with amenity_code, label, description
+  (one per amenity in the data; max 300 chars per description)
+
+Output JSON only, no prose around it.

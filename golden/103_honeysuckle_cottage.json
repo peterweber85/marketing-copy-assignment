@@ -1,0 +1,49 @@
+{
+  "property_id": 103,
+
+  "good": {
+    "human_notes": "Honest about sparse reviews (1 review, rated 5). Pet-friendly correctly stated (PetFriendly IS in amenities). No invented attributes.",
+    "human_scores": { "faithfulness": 5, "quality": 5 },
+    "hero_headline": "Stone Cottage with Log Fire near Hay-on-Wye",
+    "highlights": [
+      "Wood-burning fireplace for cosy evenings",
+      "Enclosed garden and free parking on site",
+      "Dog-friendly — pets are welcome",
+      "Ten minutes from the bookshops of Hay-on-Wye"
+    ],
+    "about_this_place": "Honeysuckle Cottage is a two-bedroom stone cottage on the edge of the Black Mountains, ten minutes from the bookshops and cafés of Hay-on-Wye. Curl up by the wood-burning fireplace after a day of walking, or take breakfast in the enclosed garden. Dogs are welcome. Sleeping up to four guests across two bedrooms and one bathroom. Full payment is due 14 days before arrival. Check-in from 4 PM, check-out 10 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "Fireplace", "label": "Fireplace", "description": "Wood-burning fireplace in the main living room." },
+      { "amenity_code": "Garden", "label": "Garden", "description": "Enclosed garden — ideal for morning coffee or afternoon reading." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Central heating throughout." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free off-road parking at the cottage." },
+      { "amenity_code": "PetFriendly", "label": "Pet friendly", "description": "Well-behaved dogs are welcome." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "From a single 5-star review, extrapolates 'beloved by guests across the UK'. Also claims 'breathtaking Black Mountain views' not stated in the data.",
+    "human_scores": { "faithfulness": 2, "quality": 4 },
+    "intentional_failures": [
+      "'beloved by guests from across the UK' — overstates 1 review as a broad pattern",
+      "'breathtaking panoramic views of the Black Mountains' — data mentions proximity to the mountains, not views from the cottage"
+    ],
+    "hero_headline": "Beloved Hay-on-Wye Cottage with Fireplace and Mountain Views",
+    "highlights": [
+      "Beloved by guests from across the UK — consistently five-star rated",
+      "Breathtaking panoramic views of the Black Mountains",
+      "Crackling wood fire and an enclosed garden for complete relaxation",
+      "Perfect dog-friendly retreat, ten minutes from Hay-on-Wye"
+    ],
+    "about_this_place": "Honeysuckle Cottage has won the hearts of guests from across Britain, earning glowing five-star praise for its perfect combination of rustic charm and countryside tranquillity. Perched on the edge of the Black Mountains, the cottage offers breathtaking views across the Welsh uplands. Two bedrooms sleep four, the wood-burning fireplace creates an instant sense of home, and the enclosed garden is a peaceful spot for your morning coffee — or your dog's morning run.",
+    "amenity_descriptions": [
+      { "amenity_code": "Fireplace", "label": "Fireplace", "description": "A characterful wood-burning fireplace that guests consistently describe as the highlight of their stay." },
+      { "amenity_code": "Garden", "label": "Garden", "description": "A beautiful enclosed cottage garden with views of the surrounding hills." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Full central heating throughout." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Well-equipped kitchen for home cooking." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Private driveway parking." },
+      { "amenity_code": "PetFriendly", "label": "Pet friendly", "description": "Dogs warmly welcome — the garden and surrounding countryside are perfect for walks." }
+    ]
+  }
+}

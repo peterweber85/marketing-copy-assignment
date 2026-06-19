@@ -1,0 +1,58 @@
+{
+  "property_id": 101,
+
+  "good": {
+    "human_notes": "Every claim traces to the data. Pool, location, capacity, and policies are all correctly stated.",
+    "human_scores": { "faithfulness": 5, "quality": 5 },
+    "hero_headline": "Seafront Villa with Private Pool on the Costa Brava",
+    "highlights": [
+      "Private pool with uninterrupted sea views",
+      "4 bedrooms sleeping up to 8 guests",
+      "Coastal path to the cove starts at the garden gate",
+      "Outdoor BBQ and shaded terrace for long group dinners"
+    ],
+    "about_this_place": "Casa del Mar sits above a quiet cove in Begur, right on the Costa Brava. The open-plan living area opens onto a large terrace with a private pool and sea views. Four bedrooms sleep eight guests across three bathrooms. A fully equipped kitchen, outdoor BBQ, and the coastal path to the beach make it an easy base for groups. Check-in from 4 PM, check-out 10 AM. 30% deposit at booking, balance due 30 days before arrival. Damage deposit €500, refunded within 7 days.",
+    "amenity_descriptions": [
+      { "amenity_code": "PrivatePool", "label": "Private pool", "description": "A full-size private pool on the terrace, directly overlooking the sea." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Uninterrupted views of the Mediterranean from the terrace and living area." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the villa." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in all bedrooms and living areas." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for cooking group meals." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free on-site parking for guests." },
+      { "amenity_code": "BBQGrill", "label": "BBQ grill", "description": "Outdoor BBQ grill on the shaded terrace." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Large shaded terrace with pool and sea views." },
+      { "amenity_code": "OutdoorShower", "label": "Outdoor Shower", "description": "Outdoor shower by the pool for rinsing off after a swim." },
+      { "amenity_code": "WasherDryer", "label": "Washer and dryer", "description": "Washer and dryer for longer stays." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Well-written but introduces 'infinity pool', 'award-winning architecture', and 'chef's kitchen' — none of which are in the data.",
+    "human_scores": { "faithfulness": 2, "quality": 4 },
+    "intentional_failures": [
+      "'infinity pool' — data lists PrivatePool with no style qualifier",
+      "'award-winning architecture' — not present in any structured field",
+      "'chef's kitchen' — data only says Kitchen"
+    ],
+    "hero_headline": "Award-Winning Villa with Infinity Pool on the Costa Brava",
+    "highlights": [
+      "Infinity pool that appears to merge with the Mediterranean horizon",
+      "Award-winning architecture by a celebrated Costa Brava designer",
+      "Chef's kitchen fully equipped for gourmet group dinners",
+      "4 bedrooms sleeping up to 8 in five-star comfort"
+    ],
+    "about_this_place": "This award-winning villa is one of Begur's most architecturally celebrated properties, perched above a private cove with a designer infinity pool that dissolves into the sea at dusk. The chef's kitchen and outdoor BBQ terrace make entertaining effortless, while four bedrooms provide five-star comfort for up to eight guests. A short walk leads to the coastal path and the cove below — the ideal base for exploring the Costa Brava in style.",
+    "amenity_descriptions": [
+      { "amenity_code": "PrivatePool", "label": "Private pool", "description": "A breathtaking infinity-edge pool that merges seamlessly with the sea below." },
+      { "amenity_code": "SeaView", "label": "Sea view", "description": "Panoramic 180-degree Mediterranean views from every room and outdoor space." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "High-speed Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in all rooms." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Professional-grade chef's kitchen with top-of-the-line appliances." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free secure parking on site." },
+      { "amenity_code": "BBQGrill", "label": "BBQ grill", "description": "Restaurant-quality outdoor grill on the terrace." },
+      { "amenity_code": "Terrace", "label": "Terrace", "description": "Expansive terrace with designer furniture and sea views." },
+      { "amenity_code": "OutdoorShower", "label": "Outdoor Shower", "description": "Outdoor shower with hot and cold water by the pool." },
+      { "amenity_code": "WasherDryer", "label": "Washer and dryer", "description": "Full-size washer and dryer." }
+    ]
+  }
+}

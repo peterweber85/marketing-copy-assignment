@@ -1,0 +1,19 @@
+Write marketing copy for the vacation rental property below.
+
+PROPERTY DATA (JSON):
+{context_json}
+
+Instructions:
+- Use the "owner_headline" as inspiration for the hero_headline — it
+  captures what makes this property special.
+- Write compelling highlights and an "about this place" paragraph.
+- Add a short description for each amenity in the data.
+
+Produce a JSON object with these fields:
+- hero_headline: a short, punchy headline (10-90 chars)
+- highlights: 3-6 bullet strings — the property's best selling points
+- about_this_place: 120-1200 chars of flowing prose about the property
+- amenity_descriptions: list of objects with amenity_code, label, description
+  (one per amenity in the data; max 300 chars per description)
+
+Output JSON only, no prose around it.

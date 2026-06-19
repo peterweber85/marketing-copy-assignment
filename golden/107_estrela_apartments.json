@@ -1,0 +1,47 @@
+{
+  "property_id": 107,
+
+  "good": {
+    "human_notes": "Honest about the 3.1 average score without trying to spin it positively. Doesn't echo the cherry-picked 5-star review samples. Quality is 3 because there is a limit to how compelling copy can be for a 3.1-score property while staying honest.",
+    "human_scores": { "faithfulness": 5, "quality": 3 },
+    "hero_headline": "One-Bedroom Apartment in Porto's Bonfim Neighbourhood",
+    "highlights": [
+      "Central Porto location close to trams and the Douro waterfront",
+      "Air conditioning, Wi-Fi, and a fully equipped kitchen",
+      "1 bedroom for up to 2 guests",
+      "Non-refundable rate — full payment at booking"
+    ],
+    "about_this_place": "Estrela Apartments is a one-bedroom apartment in Porto's Bonfim neighbourhood. The apartment is clean and functional with air conditioning, Wi-Fi, a kitchen, and a TV. Public transport connections and the Douro waterfront are within easy reach. One bedroom sleeps up to two guests with one bathroom. Note that the booking is non-refundable and full payment is due at booking. Check-in from 3 PM, check-out 11 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the apartment." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning for summer comfort." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "TV", "label": "TV", "description": "TV in the main room." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Heating for cooler months." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Cherry-picks the 5-star review samples to claim '5-star rated' and 'consistently loved' despite the actual average score being 3.1 out of 5.",
+    "human_scores": { "faithfulness": 1, "quality": 4 },
+    "intentional_failures": [
+      "'consistently 5-star rated' — average_review_score is 3.1, not 5-star",
+      "'guests rave about this Porto gem' — positive samples override the real 3.1 average"
+    ],
+    "hero_headline": "Porto's Most Loved Apartment — Consistently 5-Star Rated",
+    "highlights": [
+      "Consistently 5-star rated by guests — Porto's most loved apartment",
+      "Central Bonfim location, easy access to trams and the Douro",
+      "Guests rave about the cleanliness and the welcoming atmosphere",
+      "1 bedroom for 2 guests with all the essentials"
+    ],
+    "about_this_place": "Guests consistently award this Porto apartment five stars, calling it the best they've stayed in the city. Located in the vibrant Bonfim neighbourhood, it has built a devoted following of returning visitors who appreciate its cleanliness, central location, and the warm welcome from the host. One bedroom sleeps two guests in comfort, and the easy access to Porto's tram network and the Douro waterfront make it the ideal base for exploring the city.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Fast Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning — essential in Porto's warm summers." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Well-equipped kitchen for self-catering." },
+      { "amenity_code": "TV", "label": "TV", "description": "TV for relaxing evenings in." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Heating for cooler months." }
+    ]
+  }
+}

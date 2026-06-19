@@ -1,0 +1,44 @@
+{
+  "property_id": 104,
+
+  "good": {
+    "human_notes": "Correctly describes a studio (bedrooms=0). Max 2 guests. Kitchenette noted. Free cancellation up to 5 days mentioned correctly.",
+    "human_scores": { "faithfulness": 5, "quality": 4 },
+    "hero_headline": "Bright Studio Steps from Rossio Square, Lisbon",
+    "highlights": [
+      "Studio layout for two guests — compact and well designed",
+      "Heart of Lisbon, steps from Rossio square and tram stops",
+      "Air conditioning, Wi-Fi, and a kitchenette",
+      "Free cancellation up to 5 days before check-in"
+    ],
+    "about_this_place": "Sunny Central Studio puts you in the middle of Lisbon's historic centre — moments from Rossio square, vintage trams, and some of the city's best tascas. This bright, well-laid-out studio apartment comfortably fits two guests, with a kitchenette, a double sofa bed, and air conditioning. A damage deposit of €150 is pre-authorised and refunded within 7 days of checkout. Check-in from 3 PM, check-out 11 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the studio." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning to keep cool in summer." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Kitchenette with hob and basic utensils for simple self-catering." },
+      { "amenity_code": "TV", "label": "TV", "description": "Flat-screen TV with local channels." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Calls it a 'one-bedroom apartment' when bedrooms=0. This is a studio. Clear structural misrepresentation.",
+    "human_scores": { "faithfulness": 1, "quality": 4 },
+    "intentional_failures": [
+      "Describes as 'one-bedroom apartment' — data has bedrooms=0, this is a studio"
+    ],
+    "hero_headline": "Charming One-Bedroom Apartment in Central Lisbon",
+    "highlights": [
+      "Private bedroom and living area — ideal for couples",
+      "Steps from Rossio square and Lisbon's tram network",
+      "Air conditioning and high-speed Wi-Fi throughout",
+      "Free cancellation available — book with confidence"
+    ],
+    "about_this_place": "This charming one-bedroom apartment occupies a prime spot in the heart of Lisbon, just steps from Rossio square and the city's iconic yellow trams. The separate bedroom provides privacy and comfort for couples, while the open-plan living and kitchen area gives you space to relax after a day exploring the city. With air conditioning, fast Wi-Fi, and a fully equipped kitchen, everything you need is already here.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "High-speed Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in the bedroom and living area." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "TV", "label": "TV", "description": "Smart TV in the living room." }
+    ]
+  }
+}

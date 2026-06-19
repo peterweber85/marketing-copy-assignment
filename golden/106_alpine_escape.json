@@ -1,0 +1,51 @@
+{
+  "property_id": 106,
+
+  "good": {
+    "human_notes": "Zero reviews — copy says 'newly listed' and makes no social-proof claims. Hot tub, fireplace, mountain view all correctly stated from amenities. Policies stated correctly.",
+    "human_scores": { "faithfulness": 5, "quality": 5 },
+    "hero_headline": "Newly Listed Chalet with Hot Tub Below Mont Blanc",
+    "highlights": [
+      "Private hot tub on the deck for après-ski or stargazing",
+      "Wood-burning fireplace and mountain views from every window",
+      "3 bedrooms sleeping up to 6 guests",
+      "Freshly renovated — brand-new listing in Chamonix"
+    ],
+    "about_this_place": "A freshly renovated three-bedroom chalet on the edge of Chamonix, with a wood fire, a private hot tub on the deck, and mountain views. Ski lifts and the town centre are both a short drive away. Sleeping up to six guests across two bathrooms. Full refund if cancelled 60 or more days before check-in. 50% deposit at booking, balance due 60 days before arrival. Damage deposit €800, pre-authorised on arrival. Check-in from 5 PM, check-out 10 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "Fireplace", "label": "Fireplace", "description": "Wood-burning fireplace in the main living area." },
+      { "amenity_code": "MountainView", "label": "Mountain view", "description": "Mountain views from the main rooms and deck." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Central heating throughout the chalet." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free parking space at the chalet." },
+      { "amenity_code": "HotTub", "label": "Hot tub", "description": "Private hot tub on the outdoor deck." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Wi-Fi throughout the chalet." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Claims 'guests consistently rave' with zero reviews. Also claims 'ski-in/ski-out' when data only says ski lifts are a short drive away.",
+    "human_scores": { "faithfulness": 1, "quality": 4 },
+    "intentional_failures": [
+      "'guests consistently rave about the hot tub' — num_of_reviews is 0, no guest has reviewed this property",
+      "'ski-in/ski-out convenience' — data says ski lifts are a short drive away, not ski-in/ski-out"
+    ],
+    "hero_headline": "Guests' Favourite Chamonix Chalet — Hot Tub and Ski-In Access",
+    "highlights": [
+      "Guests consistently rave about the private hot tub under the stars",
+      "Ski-in/ski-out convenience right on the Chamonix slopes",
+      "Cosy wood-burning fireplace and mountain views",
+      "3 bedrooms for up to 6 guests in the heart of the Alps"
+    ],
+    "about_this_place": "This beloved Chamonix chalet has won the hearts of guests for its unbeatable combination of ski-in/ski-out access and a private hot tub that guests consistently describe as magical. After a day on the slopes, sink into the steaming tub and watch the Mont Blanc massif turn pink at sunset. The wood-burning fireplace, mountain views, and three beautifully appointed bedrooms make this the quintessential Alpine retreat for groups of up to six.",
+    "amenity_descriptions": [
+      { "amenity_code": "Fireplace", "label": "Fireplace", "description": "Characterful wood-burning fireplace guests love on cold evenings." },
+      { "amenity_code": "MountainView", "label": "Mountain view", "description": "Stunning, unobstructed views of the Mont Blanc massif." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Powerful central heating for the coldest Alpine nights." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Well-equipped kitchen for après-ski dining." },
+      { "amenity_code": "FreeParking", "label": "Free parking", "description": "Free ski boot and equipment storage with parking." },
+      { "amenity_code": "HotTub", "label": "Hot tub", "description": "Private hot tub on the deck — the highlight of every stay according to guests." },
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Reliable Wi-Fi throughout." }
+    ]
+  }
+}

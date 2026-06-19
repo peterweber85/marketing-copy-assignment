@@ -1,0 +1,56 @@
+{
+  "property_id": 102,
+
+  "good": {
+    "human_notes": "Correctly states 2 bedrooms for 4 guests, Barcelona location, workspace, elevator, balcony. No invented distances or renovation claims.",
+    "human_scores": { "faithfulness": 5, "quality": 4 },
+    "hero_headline": "Light-Filled Two-Bedroom in the Heart of the Eixample",
+    "highlights": [
+      "2 bedrooms sleeping up to 4 guests",
+      "Dedicated workspace with fast Wi-Fi — ideal for remote work",
+      "Elevator access, balcony, and air conditioning throughout",
+      "Quiet Eixample stretch, close to metro and restaurants"
+    ],
+    "about_this_place": "This second-floor loft sits on a quiet stretch of the Eixample, a short walk from Passeig de Gràcia. High ceilings and tall windows fill the two bedrooms and open living space with natural light. A dedicated workspace makes it well-suited for remote work, and the elevator means luggage is no problem. There is a balcony, air conditioning, and a well-equipped kitchen. Check-in from 3 PM, check-out 11 AM.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Fast Wi-Fi throughout the apartment." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Air conditioning in all rooms." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Central heating for cooler months." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Fully equipped kitchen for self-catering." },
+      { "amenity_code": "Workspace", "label": "Dedicated workspace", "description": "A proper desk and chair, separate from the living area." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Elevator access from street level." },
+      { "amenity_code": "TV", "label": "TV", "description": "Flat-screen TV in the living room." },
+      { "amenity_code": "CoffeeMaker", "label": "Coffee maker", "description": "Coffee maker for your morning routine." },
+      { "amenity_code": "Balcony", "label": "Balcony", "description": "Private balcony off the living area." }
+    ]
+  },
+
+  "bad": {
+    "human_notes": "Claims 'recently renovated in 2024' (not in data), '5-minute walk to Sagrada Família' (distance not stated), and 'panoramic city views' (balcony only).",
+    "human_scores": { "faithfulness": 3, "quality": 4 },
+    "intentional_failures": [
+      "'recently renovated in 2024' — no renovation mentioned in data",
+      "'5-minute walk to Sagrada Família' — proximity mentioned but no distance given",
+      "'panoramic city views from the balcony' — data only says balcony, no view qualifier"
+    ],
+    "hero_headline": "Newly Renovated Eixample Loft with Panoramic Views",
+    "highlights": [
+      "Just renovated in 2024 with premium finishes throughout",
+      "5-minute walk to the Sagrada Família and top Barcelona attractions",
+      "Panoramic city views from the private balcony",
+      "Dedicated workspace with gigabit Wi-Fi for remote workers"
+    ],
+    "about_this_place": "This beautifully renovated 2024 loft sits at the epicentre of Barcelona's Eixample, just a 5-minute stroll from the Sagrada Família. Floor-to-ceiling windows frame panoramic views over the city's famous grid, while the freshly redesigned interior blends Catalan heritage with contemporary comfort. Two bedrooms sleep four guests, a dedicated workspace serves remote professionals, and the elevator means arriving with luggage is effortless.",
+    "amenity_descriptions": [
+      { "amenity_code": "WiFi", "label": "Wi-Fi", "description": "Gigabit fibre Wi-Fi throughout." },
+      { "amenity_code": "AirConditioning", "label": "Air conditioning", "description": "Climate control in all rooms." },
+      { "amenity_code": "Heating", "label": "Heating", "description": "Underfloor heating throughout." },
+      { "amenity_code": "Kitchen", "label": "Full kitchen", "description": "Newly fitted kitchen with premium appliances." },
+      { "amenity_code": "Workspace", "label": "Dedicated workspace", "description": "Professional home-office setup with ergonomic chair." },
+      { "amenity_code": "Elevator", "label": "Elevator", "description": "Lift access from street to apartment." },
+      { "amenity_code": "TV", "label": "TV", "description": "Smart TV with streaming services." },
+      { "amenity_code": "CoffeeMaker", "label": "Coffee maker", "description": "Bean-to-cup coffee machine." },
+      { "amenity_code": "Balcony", "label": "Balcony", "description": "Private balcony with panoramic views over the Eixample grid." }
+    ]
+  }
+}

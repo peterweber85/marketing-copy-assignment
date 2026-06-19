@@ -1,0 +1,39 @@
+{
+  "property_id": 109,
+  "property_name": "Ático Dorado",
+  "property_type": "NormalApartment",
+  "description": {
+    "name": "Ático Dorado",
+    "headline": "Rooftop Penthouse with Sea Views — Flexible Check-In Any Time!",
+    "description": "<p>Check in whenever it suits you — we offer completely flexible arrival and departure, 24 hours a day. This top-floor apartment overlooks the bay with a private rooftop terrace and sea views. Two bedrooms sleep up to four guests.</p>"
+  },
+  "amenities": ["WiFi", "AirConditioning", "Kitchen", "TV", "Terrace", "SeaView", "Elevator"],
+  "image_urls": ["https://example.com/atico/1.jpg", "https://example.com/atico/2.jpg"],
+  "reviews": [
+    "The views from the rooftop terrace are stunning. Great location.",
+    "Late check-in was no problem at all — the host was very accommodating.",
+    "Beautiful apartment. The terrace is the highlight. Would have liked slightly more kitchen equipment."
+  ],
+  "num_of_reviews": 27,
+  "average_review_score": 4.63,
+  "rental_info": {
+    "max_guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  },
+  "location": {
+    "city": "Málaga",
+    "country": "Spain",
+    "latitude": 36.7213,
+    "longitude": -4.4213
+  },
+  "policies": {
+    "cancellation_policy": "Free cancellation up to 72 hours before check-in.",
+    "payment_schedule": "Full payment due at booking.",
+    "damage_deposit": "€200, refunded within 7 days of checkout."
+  },
+  "house_rules": {
+    "check_in_time": "7 PM",
+    "check_out_time": "10 AM"
+  }
+}

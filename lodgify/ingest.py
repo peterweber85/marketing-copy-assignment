@@ -38,6 +38,33 @@ def strip_html(html: str) -> str:
     return re.sub(r"\s+", " ", stripper.get_text()).strip()
 
 
+# Sentences in the owner description that make claims about check-in/check-out
+# flexibility or timing. These are authoritative in house_rules; the prose version
+# is often inaccurate (e.g. "flexible any time" when rules say "7 PM") and causes
+# the model to echo the claim even when the prompt says not to.
+_CHECKIN_PROSE_RE = re.compile(
+    r"[^.!?]*"
+    r"(?:check[- ]?in|check[- ]?out|arrival|departure|flexible\s+(?:arrival|check)|"
+    r"arrive\s+any\s+time|24[- ]hour\s+check|anytime\s+check)"
+    r"[^.!?]*[.!?]",
+    re.IGNORECASE,
+)
+
+
+def scrub_checkin_prose(text: str) -> str:
+    """Remove sentences making check-in/check-out claims from owner description text.
+
+    The structured ``house_rules`` fields are the authoritative source for these
+    details. Owner prose often contradicts them (e.g. "flexible any time!" when
+    house_rules says check-in is 7 PM), and leaving the contradiction in the
+    context causes the model to echo the owner claim even with prompt-level rules.
+    Removing it at the ingest stage means the model only ever sees the structured
+    value, eliminating the ambiguity rather than relying on the prompt to resolve it.
+    """
+    scrubbed = _CHECKIN_PROSE_RE.sub("", text)
+    return re.sub(r"\s{2,}", " ", scrubbed).strip()
+
+
 def build_context(prop: PropertyInput, max_reviews: int = 5) -> dict:
     """Return a clean, structured dict the prompt builder can serialise directly.
 
@@ -63,7 +90,7 @@ def build_context(prop: PropertyInput, max_reviews: int = 5) -> dict:
             "samples": prop.reviews[:max_reviews],
         },
         "owner_headline": prop.description.headline,
-        "about": strip_html(prop.description.description),
+        "about": scrub_checkin_prose(strip_html(prop.description.description)),
         "policies": {
             "cancellation": prop.policies.cancellation_policy,
             "payment_schedule": prop.policies.payment_schedule,

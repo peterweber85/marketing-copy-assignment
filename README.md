@@ -1,88 +1,175 @@
 # Lodgify — Content Generation Pipeline
 
-A vacation rental marketing copy generator built evaluation-first. The eval suite
-is the primary deliverable; the generator exists to be measured.
+A vacation-rental marketing-copy generator built **evaluation-first**. The eval suite is
+the primary deliverable; the generator exists to be measured.
+
+The full pipeline + evaluation runs in the notebook **[evals.py](evals.py)** (Marimo).
+Supporting code lives in the `lodgify/` package; inspect-ai task definitions are in
+[eval_pipeline.py](eval_pipeline.py).
 
 ---
 
 ## Approach
 
-**Evaluation-first development (EDD)** means evals are written and validated before
-the generator is built, so every prompt iteration is driven by metrics rather than
-eyeballing outputs. The eval harness is [inspect-ai](https://inspect.aisi.org.uk/).
+**Evaluation-first development (EDD)** means evals are written and validated *before* the
+generator is built, so every prompt iteration is driven by metrics rather than eyeballing
+outputs. The eval harness is [inspect-ai](https://inspect.aisi.org.uk/).
 
-### Three evaluation dimensions
+### Five evaluation dimensions
 
-| Scorer | Type | What it catches |
-|---|---|---|
-| `grounding_scorer` | Rule-based, offline | Wrong bedroom/bathroom counts; invented amenity codes; null policies mentioned; fake social proof with zero reviews |
-| `faithfulness_scorer` | LLM-as-judge (Sonnet) | Unsupported factual claims; embellishments; awards/attributes not in data |
-| `quality_scorer` | LLM-as-judge (Sonnet) | Engagement, clarity, tone, specificity |
+The job description names four axes — **factuality, grounding, robustness, user impact**.
+Each maps to one or more scorers:
 
-### The EDD arc (real, not staged)
+| Scorer | Type | Scale | Axis | What it catches |
+|---|---|---|---|---|
+| `grounding_scorer` | Rule-based, offline | 0–1 | Grounding | Wrong bedroom/bathroom counts; studio claimed as N-bedroom; invented amenity codes; null policies mentioned; social proof with zero reviews; high-rating claims below the actual score; pet-friendly without the amenity; flexible check-in against a fixed time (9 deterministic checks) |
+| `faithfulness_scorer` | LLM-as-judge (Sonnet), calibrated | 1–5 | Factuality | Unsupported claims; embellishments; awards/attributes not in the data |
+| `completeness_scorer` | Rule-based, offline | 0–1 | User impact | Amenity coverage (fraction of amenities actually described) + premium salience (is the pool/sea-view/hot-tub surfaced in the headline/highlights, not buried?) |
+| `booking_intent_scorer` | LLM-as-judge (Sonnet) | 1–5 | User impact | Would a guest click "Request to Book"? Persuasiveness / conversion potential, distinct from "well-written" |
+| `quality_scorer` | LLM-as-judge (Sonnet) | 1–5 | — | Engagement, clarity, tone, specificity — deliberately *blind* to the data, so a fluent hallucination scores high here but exposes itself on faithfulness |
 
-1. **Evals reveal a problem:** `listing_eval` prompt v1 produces mean faithfulness
-   **3.33/5** — the Sonnet judge flags embellishments like "saltwater-inspired pool",
-   "full central heating" (data says "Heating"), "panoramic vistas from every room".
-2. **Diagnosis:** the v1 prompt says "write compelling copy" without anti-embellishment
-   rules. The model adds descriptive attributes it infers from context.
-3. **Prompt fix:** v2 adds explicit rules: "describe amenities only with information
-   available from the data — do not add qualifiers not in the structured fields."
-4. **Evals confirm:** mean faithfulness improves to **3.83/5** (+15%). Individual
-   fixes: Eixample Loft 3→5, Alpine Escape 3→4. Quality drops slightly (3.67→3.33)
-   — the expected cost/quality tradeoff of a more constrained prompt.
+Two of the five (`grounding`, `completeness`) are **fully deterministic and offline** —
+no API key needed to run them. The three LLM judges need a key only to *regenerate* logs;
+the committed `.eval` logs are viewable offline.
 
-The two prompt versions and their runs are committed in `logs/` so the before/after
-is visible in `inspect view` without re-running anything.
+**Robustness** is measured by `reliability_eval` (same fixtures × N epochs → score
+variance) rather than a scorer of its own.
 
-### Stub validation (EDD discipline)
+### The EDD arc (real, backed by the committed logs)
 
-Before any real LLM call, the scorers were validated against hand-crafted stub
-outputs for property 104 (the "trap": a studio whose owner headline falsely claims
-two bedrooms):
+The brief asks for a story where *evals reveal a problem → a prompt change fixes it →
+evals confirm*. Five prompt versions were written, each in response to a specific failure
+surfaced by the eval suite:
 
-| Stub | grounding | faithfulness | quality |
-|---|---|---|---|
-| Bad (invented Jacuzzi, wrong bedroom count, fake awards) | 0.50 | 1/5 | 2/5 |
-| Good (correct studio description) | 1.00 | 2/5 | 3/5 |
+| Version | Added rule (in response to an eval failure) |
+|---|---|
+| `v1` | naive "write compelling copy" baseline |
+| `v2` | anti-embellishment: describe amenities only from the data, no invented qualifiers |
+| `v3` | review-score accuracy (no "5-star"/"highly rated" below the actual score) + pet-friendly accuracy |
+| `v4` | check-in / check-out accuracy |
+| `v5` | prescriptive check-in wording + worked example; pairs with `scrub_checkin_prose()` in ingest |
 
-This confirms the scorers discriminate good from bad copy before the real generator
-is built — the AI equivalent of "watch the test fail first."
+Mean scores across all 9 fixtures (`listing_eval`, Haiku 4.5, committed logs):
 
-### Reliability
+| | v1 | v2 | v3 | v4 | v5 |
+|---|---|---|---|---|---|
+| `grounding` (0–1) | 0.965 | 0.989 | 0.989 | **1.000** | **1.000** |
+| `faithfulness` (1–5) | 2.89 | **4.11** | 3.89 | 3.89 | **4.11** |
+| `quality` (1–5) | 3.78 | 3.22 | 3.44 | 3.33 | 3.11 |
+| `completeness` (0–1) | 0.93 | 0.94 | 0.94 | 0.93 | 0.92 |
+| `booking_intent` (1–5) | 3.44 | 2.89 | 3.11 | 3.00 | 3.11 |
 
-`reliability_eval` ran each of the 6 fixtures 3 times (18 total samples).
-`grounding_scorer` held at **1.000** every run — structural checks on typed fields
-are completely stable. `faithfulness_scorer` mean = **4.000** across all 18 runs.
+Three movements show up cleanly:
+
+**1. Faithfulness jump (v1 → v2).** The naive v1 prompt produces mean faithfulness **2.89** —
+the Sonnet judge flags embellishments ("saltwater-inspired pool", "panoramic views from
+every room", inferred attributes). The v2 anti-embellishment rule lifts faithfulness to
+**4.11 (+42%)**. This is the headline EDD win: a metric exposed the problem, one targeted
+prompt change fixed it, the metric confirmed it.
+
+**2. Grounding climb to determinism (v1 → v4).** `grounding_scorer` rises **0.965 → 0.989 →
+1.000** as v3/v4 add review-score, pet, and check-in rules. By v4 every structural check
+passes on every fixture.
+
+**3. The quality/faithfulness tradeoff.** Quality *drops* 3.78 → 3.11 as the prompt gets
+stricter — the expected, visible cost of constraining flowery language. Surfacing this
+tradeoff (rather than hiding it) is the point of scoring quality *separately* from
+faithfulness.
+
+**Robustness arc (v4 → v5).** `reliability_eval` (3 epochs/fixture, 27 samples) exposed that
+fixture 109 (Ático Dorado — owner headline claims "flexible check-in any time" but
+house_rules sets a fixed 7 PM) made `grounding_scorer` *non-deterministic*: **v4 grounding
+std = 0.021** (the model sometimes echoed the owner's false claim). Fix: `scrub_checkin_prose()`
+removes the contradictory owner sentence before the model sees it, and v5 gives prescriptive
+wording. Result: **v5 grounding std = 0.000** — the failure became impossible, not just
+rarer. This is the robustness axis the JD asks for: not just "is it right once" but "is it
+reliably right across repeated runs".
+
+### Judge calibration (golden dataset)
+
+LLM judges drift from human judgement, so the `faithfulness` and `quality` judges are
+calibrated against a hand-annotated **golden dataset** (`golden/`): for each of the 9
+fixtures, a `good` variant (exemplary, human faithfulness = 5) and a `bad` variant
+(deliberately flawed in that fixture's failure mode, human faithfulness 1–3). The
+calibration metric is **mean absolute deviation (MAD)** between judge and human scores on
+a 1–5 scale; target < 0.7.
+
+Two calibration techniques were applied to the faithfulness judge and measured on the
+golden set (`golden_eval`):
+
+1. **Amenity-label note** — tells the judge that curated translations like
+   `Kitchen → "Full kitchen"` are faithful, not embellishments.
+2. **Three calibration examples** — a score-5 (fully faithful), score-1 (studio
+   misrepresented as one-bedroom), and score-2 (fabricated "award-winning / infinity pool")
+   exemplar, so the judge scores against a demonstrated standard.
+
+Result: faithfulness **MAD 1.22 (uncalibrated) → 0.94 (calibrated)**. The judge separates
+good from bad copy cleanly (good avg **3.67**, bad avg **1.44**) but is systematically
+*harsher* than humans on good copy (humans say 5, judge says ~3.7). That residual gap is a
+real finding, not noise: the judge's *ranking* is trustworthy, its *absolute* generosity is
+not — so it is used for relative comparison across prompt versions, not as a pass/fail gate.
+
+> A claim-decomposition variant of the faithfulness judge was also tried; it scored *worse*
+> on the bad copies (the per-claim verifier was fooled by cherry-picked review snippets) and
+> was removed. The experiment is documented here rather than hidden.
+
+### Stub validation (watch the test fail first)
+
+Before any real LLM call, the scorers were validated against hand-crafted stub outputs for
+property 104 (the "trap": a studio whose owner headline falsely claims two bedrooms):
+
+| Stub | grounding | faithfulness | completeness | booking_intent | quality |
+|---|---|---|---|---|---|
+| Bad (invented Jacuzzi, wrong bedroom count, fake awards) | 0.64 | 1/5 | 0.63 | 2/5 | 3/5 |
+| Good (correct studio description) | 1.00 | 3/5 | 1.00 | 3/5 | 3/5 |
+
+The bad stub is caught on every objective axis (grounding, faithfulness, completeness) yet
+still scores 3/5 on *quality* — it is fluent, well-written hallucination. That contrast is
+the design: quality alone would pass the bad copy; the grounding/faithfulness scorers are
+what catch it. This confirms the scorers discriminate good from bad copy *before* the real
+generator exists — the AI equivalent of watching a test fail first.
 
 ### Model choices and cost/latency tradeoffs
 
-- **Generation: Haiku 4.5** — fast, cheap ($1/$5 per MTok), sufficient for
-  structured-output generation from a tight prompt.
-- **Judge: Sonnet 4.6** — stronger reasoning for nuanced faithfulness assessment.
-  LLM judging costs ~2× more than generation but is only called in eval, not production.
-- **Prompt caching** is visible in the logs (Sonnet cache hits grow across runs in
-  the same session). For production, caching the system prompt + property schema
-  would reduce per-call judge cost by ~90%.
+- **Generation: Haiku 4.5** — fast, cheap ($1/$5 per MTok), sufficient for structured
+  generation from a tight prompt. The logs show Haiku already scores **1.0 grounding** on
+  every fixture under v4/v5, so a bigger generation model would not improve grounding.
+- **Judge: Sonnet 4.6** — stronger reasoning for nuanced faithfulness/booking-intent
+  judging. LLM judging costs more per call than generation but runs only in eval, not in
+  production.
+- **Prompt caching** is visible in the Sonnet usage as cache hits grow within a run. In
+  production, caching the system prompt + property schema would cut per-call judge cost
+  substantially.
 
 ---
 
 ## Repository structure
 
 ```
+evals.py            ← the deliverable: Marimo notebook running the full pipeline + evals
+eval_pipeline.py    inspect-ai task definitions: stub_eval, listing_eval, reliability_eval, golden_eval
 lodgify/
-  models.py        Pydantic input (PropertyInput) + output (ListingCopy) schemas
-  amenities.py     Amenity-code → human-label map; CamelCase fallback
-  ingest.py        HTML stripping, context normalization (no LLM)
-  scorers.py       The three scorers — grounding, faithfulness, quality
-  generator.py     Solver chain: ingest_solver + generate_solver (versioned prompts)
-  data.py          Fixture loader (validates against PropertyInput on load)
-fixtures/          6 property JSON files; each targets a specific eval dimension
-logs/              Committed inspect-ai .eval logs (view offline with inspect view)
+  models.py         Pydantic input (PropertyInput) + output (ListingCopy) schemas
+  amenities.py      Amenity-code → human-label map; CamelCase fallback
+  ingest.py         HTML stripping, check-in prose scrubbing, context normalization (no LLM)
+  generator.py      Solver chain: ingest_solver + generate_solver (versioned prompts)
+  scorers.py        The five scorers
+  data.py           Fixture loader (validates against PropertyInput on load)
+  golden.py         Golden-dataset loader (good/bad variants + human scores) for calibration
+prompts/            system.txt + v1–v5 prompt versions (plain text, version-controlled)
+fixtures/           9 property JSON files; each targets specific eval checks
+golden/             9 golden files (good + bad annotated variants) for judge calibration
+logs/               Committed inspect-ai .eval logs (view offline with inspect view)
 tests/
-  test_pipeline.py 36 offline tests; covers DI, inheritance, mocking, scorers
-evals.py           inspect-ai task definitions: stub_eval, listing_eval, reliability_eval
+  test_pipeline.py  46 offline tests; DI, inheritance, mocking, scorers, ingest, loaders
 ```
+
+### Output schema (`ListingCopy`)
+
+Maps directly to the brief's four sections, validated by Pydantic on generation:
+`hero_headline` (10–90 chars) · `highlights` (3–6 items) · `about_this_place` (120–1200
+chars) · `amenity_descriptions` (each with an `amenity_code` that must be one of the
+property's input codes).
 
 ---
 
@@ -91,55 +178,69 @@ evals.py           inspect-ai task definitions: stub_eval, listing_eval, reliabi
 **Setup (one time):**
 ```bash
 uv sync
-cp .env.example .env
-# add ANTHROPIC_API_KEY to .env
+cp .env.example .env   # add ANTHROPIC_API_KEY — only needed to regenerate logs / run the live notebook cell
 ```
 
-**Run tests (offline, no API key needed):**
+**Run the tests (offline, no API key):**
 ```bash
-uv run pytest tests/ -v
+uv run pytest tests/ -v          # 46 tests
 ```
 
-**View committed eval results (no API key needed):**
+**Open the notebook (the main deliverable):**
+```bash
+uv run marimo edit evals.py      # interactive
+# or, read-only:
+uv run marimo run evals.py
+```
+The notebook reads the committed `.eval` logs, so the EDD arc, reliability, and calibration
+sections render **without an API key**. One cell generates live copy with Haiku for a single
+fixture *if* a key is present, and is skipped otherwise.
+
+**View the committed eval results (offline, no API key):**
 ```bash
 uv run inspect view --log-dir logs/
 ```
-Opens a browser UI. Each run shows: every property, the generated copy, per-scorer
-verdicts, aggregate scores, and token usage. The two `listing_eval` runs labelled
-v1 and v2 show the EDD before/after.
 
 **Regenerate eval logs (requires API key in `.env`):**
 ```bash
 # Validate scorers against stubs (EDD discipline)
-uv run inspect eval evals.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=bad
-uv run inspect eval evals.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=good
+uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=bad
+uv run inspect eval eval_pipeline.py@stub_eval --model anthropic/claude-sonnet-4-6 -T variant=good
 
-# The EDD arc — prompt v1 (problem) then v2 (fix)
-uv run inspect eval evals.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v1
-uv run inspect eval evals.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v2
+# The grounding arc — run each prompt version
+uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v2
+uv run inspect eval eval_pipeline.py@listing_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
 
-# Reliability (3 epochs per property)
-uv run inspect eval evals.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001
+# Robustness (3 epochs per fixture) — compare v4 (std>0) vs v5 (std=0)
+uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v4
+uv run inspect eval eval_pipeline.py@reliability_eval --model anthropic/claude-haiku-4-5-20251001 -T prompt_version=v5
+
+# Judge calibration against the golden dataset (MAD)
+uv run inspect eval eval_pipeline.py@golden_eval --model anthropic/claude-sonnet-4-6
 ```
 
-### Reading the inspect view logs
+### Reading the inspect-view logs
 
 In the browser UI (`inspect view`):
-- **Left panel:** list of eval runs. The run name shows the task and timestamp.
-- **Samples tab:** one row per property. Click to expand and see the generated copy
-  and each scorer's verdict + explanation.
-- **Scores column:** `grounding_scorer` is 0–1 (fraction of checks passed);
-  `faithfulness_scorer` and `quality_scorer` are 1–5.
+- **Left panel:** list of eval runs (task name + timestamp).
+- **Samples tab:** one row per property/variant. Click to expand the generated copy and
+  each scorer's verdict + explanation. `grounding`/`completeness` are 0–1; the three LLM
+  judges are 1–5.
 - **Usage tab:** token counts per model (Haiku for generation, Sonnet for judging).
 
 Key runs to compare:
+
 | Run | What to look for |
 |---|---|
-| `stub_eval variant=bad` | All three scorers should be low — confirms they catch failures |
-| `stub_eval variant=good` | All three should be higher — confirms they pass good copy |
-| `listing_eval prompt_v1` | faithfulness_scorer mean ~3.3; check property 102 (Eixample) and 106 (Alpine) |
-| `listing_eval prompt_v2` | faithfulness_scorer improves to ~3.8; same properties now score higher |
-| `reliability_eval` | 18 samples (6×3); grounding holds at 1.0 every run |
+| `stub_eval variant=bad` vs `good` | scorers discriminate bad (grounding 0.64, faith 1) from good (grounding 1.0) |
+| `listing_eval v1` vs `v2` | faithfulness jumps 2.89 → 4.11 (anti-embellishment fix) |
+| `listing_eval v2 → v3 → v4` | grounding climbs to 1.000 |
+| `reliability_eval v4` vs `v5` | grounding std 0.021 → 0.000 (fixture 109 robustness fix) |
+| `golden_eval` (uncalibrated vs calibrated) | faithfulness MAD 1.22 → 0.94; good avg 3.67 vs bad avg 1.44 |
+
+All committed logs carry the full five scorers, except the **uncalibrated `golden_eval`
+baseline** (the earlier of the two golden logs), which is kept deliberately as the
+"before-calibration" reference for the MAD comparison.
 
 ---
 
@@ -147,42 +248,37 @@ Key runs to compare:
 
 Claude Code (claude-opus-4-8 and claude-sonnet-4-6) was used throughout:
 
-- **Architecture design:** Claude explained inspect-ai's solver/scorer/task
-  primitives and how they map onto the EDD requirements (Dataset → Solver chain →
-  Scorers → committed `.eval` logs).
+- **Architecture design:** Claude explained inspect-ai's solver/scorer/task primitives and
+  how they map onto the EDD requirements (Dataset → Solver chain → Scorers → committed
+  `.eval` logs).
 - **Code generation:** initial drafts of `models.py`, `scorers.py`, `generator.py`,
-  `evals.py`, and `tests/test_pipeline.py` were generated by Claude and then
-  reviewed and adjusted for correctness.
-- **Fixture design:** Claude suggested the edge-case matrix (studio with misleading
-  headline, zero-review property, null-policy property, HTML puffery) and the
-  deliberate trap fixture design.
-- **Debugging:** the stale `_SYSTEM_BASE` grounding instruction that prevented the
-  EDD arc from manifesting was diagnosed via Claude by checking what context the
-  model actually received. Similarly, the `ChatMessageSystem` API fix (vs. the
-  rejected `config={"system": ...}` approach) was identified by Claude checking the
-  inspect-ai source.
-- **EDD iteration:** Claude read the per-sample faithfulness explanations from the
-  eval log to diagnose the embellishment failure mode and design the anti-embellishment
-  rule that became v2.
+  `eval_pipeline.py`, the notebook, and `tests/test_pipeline.py` were generated by Claude
+  and then reviewed and adjusted for correctness.
+- **Fixture & golden design:** Claude proposed the edge-case matrix (studio with misleading
+  headline, zero-review property, null-policy property, cherry-picked low-score reviews,
+  pet-in-reviews-but-not-amenities, contradictory check-in) and the good/bad golden variants.
+- **Debugging:** the stale `_SYSTEM_BASE` grounding instruction that masked the EDD arc, the
+  `ChatMessageSystem` vs `config={"system": ...}` API fix, and a `.format()` brace-escaping
+  bug in the calibration prompt were all diagnosed via Claude.
+- **EDD iteration:** Claude read the per-sample faithfulness/grounding explanations from the
+  eval logs to diagnose each failure mode and design the v2→v5 prompt rules.
 
-All design decisions (eval rubrics, scorer weights, prompt version strategy, fixture
-edge cases) and all validation of the generated code were done by the human author.
+All design decisions (eval rubrics, scorer set, prompt-version strategy, fixture and golden
+edge cases) and all validation of generated code were done by the human author.
 
 ---
 
 ## What I'd do with more time
 
-- **Human eval:** recruit a small panel to score a sample of outputs on the same
-  1–5 rubrics; calibrate the LLM judge against human scores and adjust the rubric
-  wording where they diverge.
-- **A/B testing:** deploy v1 and v2 to a shadow traffic split; measure real guest
-  click-through and booking intent rather than proxy metrics.
-- **Production monitoring:** track faithfulness and grounding on live model outputs
-  using the same scorers, with an alert threshold (e.g. grounding < 0.95 → flag
-  for human review).
-- **Hallucination red-teaming:** adversarially design fixtures where the model is
-  most likely to fabricate (very sparse data, misleading owner text in multiple
-  languages, HTML with embedded fake stats).
-- **Cost optimisation:** benchmark Haiku vs Sonnet on the eval suite; the eval logs
-  show Haiku already scores 1.0 on grounding across all fixtures, so upgrading the
-  generation model may not improve grounding and would cost 5× more.
+- **Recruit a real human panel** for the golden scores (they're currently the author's
+  annotations) and re-tune the judge rubric wording to close the residual harshness gap on
+  good copy.
+- **Drive a prompt iteration off `booking_intent`** specifically — so far it is reported
+  but no prompt change has targeted it; a v6 aimed at lifting booking intent without
+  sacrificing faithfulness would extend the EDD story to the user-impact axis.
+- **A/B testing:** deploy two prompt versions to a shadow traffic split and measure real
+  guest click-through against the `booking_intent` proxy.
+- **Production monitoring:** run `grounding`/`completeness` on live outputs with an alert
+  threshold (e.g. grounding < 0.95 → human review), since both are offline and cheap.
+- **Hallucination red-teaming:** adversarial fixtures with very sparse data, misleading
+  multilingual owner text, and HTML with embedded fake stats.

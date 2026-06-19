@@ -1,0 +1,40 @@
+{
+  "property_id": 107,
+  "property_name": "Estrela Apartments",
+  "property_type": "NormalApartment",
+  "description": {
+    "name": "Estrela Apartments",
+    "headline": "Porto's Most Loved Apartment — 5-Star Reviews Only!",
+    "description": "<p>A cheerful one-bedroom apartment in Porto's Bonfim neighbourhood. Clean, functional, and close to public transport. Steps from a tram stop and a ten-minute walk to the Douro waterfront.</p>"
+  },
+  "amenities": ["WiFi", "AirConditioning", "Kitchen", "TV", "Heating"],
+  "image_urls": ["https://example.com/estrela/1.jpg"],
+  "reviews": [
+    "Absolutely fabulous apartment — easy 5 stars. Loved every second of it.",
+    "The best place I've stayed in Porto, bar none. Highly recommend to everyone.",
+    "Incredible value, 5/5 would book again in a heartbeat.",
+    "Spotlessly clean, great host, 5-star experience all the way."
+  ],
+  "num_of_reviews": 34,
+  "average_review_score": 3.1,
+  "rental_info": {
+    "max_guests": 2,
+    "bedrooms": 1,
+    "bathrooms": 1
+  },
+  "location": {
+    "city": "Porto",
+    "country": "Portugal",
+    "latitude": 41.1496,
+    "longitude": -8.5795
+  },
+  "policies": {
+    "cancellation_policy": "Non-refundable.",
+    "payment_schedule": "Full payment due at booking.",
+    "damage_deposit": null
+  },
+  "house_rules": {
+    "check_in_time": "3 PM",
+    "check_out_time": "11 AM"
+  }
+}
