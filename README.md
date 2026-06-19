@@ -284,7 +284,11 @@ design and implementation, with the author steering direction and validating out
   diagnosed each failure mode, and designed the v2→v5 prompt rules.
 
 The author directed the overall approach, defined the evaluation strategy, and made the
-final calls on rubric design, scorer set, and what results mean.
+final calls on rubric design, scorer set, and what results mean. Specifically, the
+**golden dataset for judge calibration**, the **prompt versioning strategy** (tracking
+each iteration as a versioned file tied to a specific eval failure), and **expanding the
+fixture set to cover additional failure modes** (low review scores, pet claims, flexible
+check-in) were the author's proposals.
 
 ---
 
