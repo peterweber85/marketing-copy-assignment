@@ -9,6 +9,24 @@ Supporting code lives in the `lodgify/` package; inspect-ai task definitions are
 
 ---
 
+## Quick start
+
+```bash
+uv sync                            # install dependencies (no API key needed for this)
+uv run marimo edit evals.py        # open the notebook — reads committed logs, no key required
+```
+
+Everything in the notebook — EDD arc, reliability, calibration — loads from committed
+`.eval` logs and renders without an API key. One cell runs a live generation with Haiku
+*if* `ANTHROPIC_API_KEY` is set in `.env`; it is skipped otherwise.
+
+```bash
+uv run pytest tests/ -v            # 46 offline tests, no API key
+uv run inspect view --log-dir logs/ # browse committed eval logs in the browser
+```
+
+---
+
 ## Approach
 
 **Evaluation-first development (EDD)** means evals are written and validated *before* the
@@ -147,7 +165,6 @@ generator exists — the AI equivalent of watching a test fail first.
 
 ```
 evals.py            ← the deliverable: Marimo notebook (source of truth)
-evals.ipynb         Jupyter export of evals.py (generated; regenerate with: marimo export ipynb evals.py -o evals.ipynb)
 eval_pipeline.py    inspect-ai task definitions: stub_eval, listing_eval, reliability_eval, golden_eval
 lodgify/
   models.py         Pydantic input (PropertyInput) + output (ListingCopy) schemas
@@ -189,19 +206,13 @@ uv run pytest tests/ -v          # 46 tests
 
 **Open the notebook (the main deliverable):**
 ```bash
-uv run marimo edit evals.py      # interactive (Marimo — recommended)
-uv run marimo run evals.py       # read-only Marimo
-# or open the static Jupyter export directly in any Jupyter environment:
-jupyter lab evals.ipynb
+uv run marimo edit evals.py      # interactive
+uv run marimo run evals.py       # read-only
 ```
 The notebook reads the committed `.eval` logs, so the EDD arc, reliability, and calibration
 sections render **without an API key**. One cell generates live copy with Haiku for a single
 fixture *if* a key is present, and is skipped otherwise.
 
-**Regenerate the Jupyter export after editing `evals.py`:**
-```bash
-uv run marimo export ipynb evals.py -o evals.ipynb --include-outputs
-```
 
 **View the committed eval results (offline, no API key):**
 ```bash
@@ -277,15 +288,30 @@ edge cases) and all validation of generated code were done by the human author.
 
 ## What I'd do with more time
 
-- **Recruit a real human panel** for the golden scores (they're currently the author's
-  annotations) and re-tune the judge rubric wording to close the residual harshness gap on
-  good copy.
-- **Drive a prompt iteration off `booking_intent`** specifically — so far it is reported
-  but no prompt change has targeted it; a v6 aimed at lifting booking intent without
-  sacrificing faithfulness would extend the EDD story to the user-impact axis.
-- **A/B testing:** deploy two prompt versions to a shadow traffic split and measure real
-  guest click-through against the `booking_intent` proxy.
-- **Production monitoring:** run `grounding`/`completeness` on live outputs with an alert
-  threshold (e.g. grounding < 0.95 → human review), since both are offline and cheap.
-- **Hallucination red-teaming:** adversarial fixtures with very sparse data, misleading
-  multilingual owner text, and HTML with embedded fake stats.
+- **Recruit a real human panel** for the golden scores (currently the author's annotations).
+  3–5 domain experts scoring 50–100 generated samples would expose whether the judge's
+  variance is legitimate disagreement or noise, surface failure modes the traps didn't
+  anticipate, and provide ground truth to close the residual MAD gap (judge ≈3.7 on samples
+  humans rate 5).
+
+- **Drive a prompt iteration off `booking_intent`** — the v1–v5 arc focused on
+  grounding/faithfulness; `booking_intent_scorer` is reported but no prompt change has
+  targeted it yet. A v6 optimising for urgency/specificity *without* sacrificing faithfulness
+  is an interesting multi-axis problem: does "premium experience" language increase booking
+  intent while still passing the faithfulness judge?
+
+- **A/B testing in production.** v5 outperforms v1 on every proxy metric. Whether it
+  translates to real business outcome (click-through, booking rate) is unknown. A shadow
+  traffic split for 2–4 weeks would measure actual guest behaviour and validate whether
+  the evals are optimising for the right thing.
+
+- **Production monitoring.** `grounding` and `completeness` are deterministic and run in
+  <100ms — cheap enough for every generated listing. Anything below grounding 0.95 flags for
+  human review before publication. `faithfulness`/`quality` cost one Sonnet call each, so run
+  them nightly on a random sample to detect prompt drift or model degradation over time.
+
+- **Prompt-as-config operationalisation.** Prompts are versioned plain-text files — no Python
+  required to propose a change. The next step is a lightweight UI for content managers to
+  propose prompt edits, automated eval runs on the golden set + recent prod samples, and
+  side-by-side `inspect view` comparison before/after. That closes the EDD loop: metrics drive
+  every prompt change, nothing ships untested.

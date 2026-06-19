@@ -673,7 +673,7 @@ def _(mo, rel_v4, rel_v5):
         mo.md("""
         **Finding:** 8 of 9 fixtures already had `g_std = 0.000` in v4 —
         the structural grounding rules were deterministic.
-        Fixture 109 (Ático Dorado) was the outlier: its `g_std ≈ 0.05`
+        Fixture 109 (Ático Dorado) was the outlier: its `g_std = 0.064`
         flagged the check-in rule as unreliable.
         v5 fixed it by scrubbing the contradictory flexibility claim **at the ingest stage**
         rather than relying solely on a prompt instruction to override it.
@@ -710,7 +710,7 @@ def _(mo):
     "check in any time 24h" and `house_rules.check_in` said "7 PM", the model occasionally
     picked the prose over the structured field even with an explicit rule against it.
     `scrub_checkin_prose()` in `ingest.py` removed the contradiction before the model saw it.
-    The grounding std on fixture 109 dropped from ≈0.05 to 0.000.
+    The grounding std on fixture 109 dropped from 0.064 to 0.000.
 
     ### What I'd do with more time
 
