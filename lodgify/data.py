@@ -8,7 +8,6 @@ copy against these exact fields, so loading validates each file against
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from lodgify.models import PropertyInput

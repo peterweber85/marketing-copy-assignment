@@ -8,13 +8,11 @@ app = marimo.App(width="medium")
 def _():
     import marimo as mo
     import os, json, glob, statistics
-    from pathlib import Path
     from collections import defaultdict
     from inspect_ai.log import read_eval_log
     from lodgify.data import load_fixtures, load_fixture
     from lodgify.ingest import build_context
     from lodgify.generator import available_versions, load_prompt, load_system_prompt
-    from lodgify.amenities import humanize
 
     return (
         available_versions,
@@ -535,8 +533,6 @@ def _(edd_display, mo, score_progression):
 
 @app.cell
 def _(log_v2, log_v4, mo):
-    from lodgify.scorers import _run_grounding_checks as _gc
-
     _NAMES = {
         101: "Casa del Mar", 102: "Eixample Loft", 103: "Honeysuckle",
         104: "Sunny Studio", 105: "Marina View", 106: "Alpine Escape",
@@ -643,15 +639,15 @@ def _(defaultdict, glob, read_eval_log, statistics):
 
 @app.cell
 def _(mo, rel_v4, rel_v5):
-    _NAMES_R = {
+    _NAMES = {
         101: "Casa del Mar", 102: "Eixample Loft", 103: "Honeysuckle",
         104: "Sunny Studio", 105: "Marina View", 106: "Alpine Escape",
         107: "Estrela Apts", 108: "Finca las Rosas", 109: "Ático Dorado",
     }
 
     rel_rows = []
-    for _pid in sorted(_NAMES_R):
-        _row = {"Property": f"{_pid} – {_NAMES_R[_pid]}"}
+    for _pid in sorted(_NAMES):
+        _row = {"Property": f"{_pid} – {_NAMES[_pid]}"}
         if _pid in rel_v4:
             _row["G mean (v4)"] = rel_v4[_pid]["g_mean"]
             _row["G std (v4)"] = rel_v4[_pid]["g_std"]

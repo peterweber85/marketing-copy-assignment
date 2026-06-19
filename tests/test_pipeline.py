@@ -23,18 +23,16 @@ All tests run with ``uv run pytest tests/`` — no env vars required.
 from __future__ import annotations
 
 import asyncio
-import json
 from abc import ABC, abstractmethod
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from lodgify.amenities import humanize, humanize_all, is_known
+from lodgify.amenities import humanize
 from lodgify.data import load_fixture, load_fixtures
 from lodgify.ingest import build_context, scrub_checkin_prose, strip_html
 from lodgify.models import AmenityDescription, ListingCopy, PropertyInput
 from lodgify.scorers import (
-    _copy_full_text,
     _extract_bedroom_numbers,
     _run_grounding_checks,
     completeness_scorer,
@@ -76,6 +74,16 @@ class MockModelClient(AbstractModelClient):
 
     def generate(self, prompt: str) -> str:
         return self._response
+
+
+def _make_scorer_state(copy: ListingCopy, prop: PropertyInput):
+    """Build a minimal TaskState with listing_copy in metadata for scorer tests."""
+    from inspect_ai.solver import TaskState
+    return TaskState(
+        model="mockllm/model", sample_id="test", epoch=1,
+        input=prop.model_dump_json(), messages=[],
+        metadata={"property": prop.model_dump(), "listing_copy": copy},
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -495,12 +503,7 @@ class TestPromptLoading:
 
 class TestCompletenessScorer:
     def _make_state(self, copy, prop):
-        from inspect_ai.solver import TaskState
-        return TaskState(
-            model="mockllm/model", sample_id="test", epoch=1,
-            input=prop.model_dump_json(), messages=[],
-            metadata={"property": prop.model_dump(), "listing_copy": copy},
-        )
+        return _make_scorer_state(copy, prop)
 
     def _score(self, copy, prop):
         return asyncio.run(completeness_scorer()(self._make_state(copy, prop), None))
@@ -597,12 +600,7 @@ class TestGoldenLoader:
 
 class TestBookingIntentScorer:
     def _make_state(self, copy, prop):
-        from inspect_ai.solver import TaskState
-        return TaskState(
-            model="mockllm/model", sample_id="test", epoch=1,
-            input=prop.model_dump_json(), messages=[],
-            metadata={"property": prop.model_dump(), "listing_copy": copy},
-        )
+        return _make_scorer_state(copy, prop)
 
     def test_parses_judge_response_correctly(self, prop_101) -> None:
         from lodgify.scorers import booking_intent_scorer
