@@ -197,7 +197,7 @@ property's input codes).
 **Setup (one time):**
 ```bash
 uv sync
-cp .env.example .env   # add ANTHROPIC_API_KEY — only needed to regenerate logs / run the live notebook cell
+cp .env.example .env  # add ANTHROPIC_API_KEY — only needed to regenerate logs / run the live notebook cell
 ```
 
 **Run the tests (offline, no API key):**
