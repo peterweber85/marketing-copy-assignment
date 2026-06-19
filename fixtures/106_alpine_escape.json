@@ -1,0 +1,35 @@
+{
+  "property_id": 106,
+  "property_name": "Alpine Escape Chalet",
+  "property_type": "Chalet",
+  "description": {
+    "name": "Alpine Escape Chalet",
+    "headline": "Newly listed chalet with hot tub below Mont Blanc",
+    "description": "<p>A freshly renovated three-bedroom chalet on the edge of Chamonix, with a wood fire, a private hot tub on the deck, and mountain views from every window. Ski lifts and the town centre are both a short drive away. This is a brand-new listing.</p>"
+  },
+  "amenities": ["Fireplace", "MountainView", "Heating", "Kitchen", "FreeParking", "HotTub", "WiFi"],
+  "image_urls": ["https://example.com/alpine-escape/1.jpg"],
+  "reviews": [],
+  "num_of_reviews": 0,
+  "average_review_score": 0.0,
+  "rental_info": {
+    "max_guests": 6,
+    "bedrooms": 3,
+    "bathrooms": 2
+  },
+  "location": {
+    "city": "Chamonix",
+    "country": "France",
+    "latitude": 45.9237,
+    "longitude": 6.8694
+  },
+  "policies": {
+    "cancellation_policy": "Full refund if cancelled at least 60 days before check-in.",
+    "payment_schedule": "50% deposit at booking, balance due 60 days before arrival.",
+    "damage_deposit": "€800, pre-authorised on arrival."
+  },
+  "house_rules": {
+    "check_in_time": "5 PM",
+    "check_out_time": "10 AM"
+  }
+}

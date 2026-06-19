@@ -1,0 +1,39 @@
+{
+  "property_id": 101,
+  "property_name": "Casa del Mar",
+  "property_type": "Villa",
+  "description": {
+    "name": "Casa del Mar",
+    "headline": "Seafront villa with private pool on the Costa Brava",
+    "description": "<p>Wake up to the sound of the Mediterranean at Casa del Mar, a bright villa perched above a quiet cove in Begur. The open-plan living area opens onto a large terrace with a private pool and uninterrupted sea views. Four bedrooms sleep up to eight guests in comfort.</p><p>The fully equipped kitchen, outdoor BBQ and shaded dining area make it easy to host long lunches, while the coastal path to the beach starts at the garden gate.</p>"
+  },
+  "amenities": ["PrivatePool", "SeaView", "WiFi", "AirConditioning", "Kitchen", "FreeParking", "BBQGrill", "Terrace", "OutdoorShower", "WasherDryer"],
+  "image_urls": ["https://example.com/casa-del-mar/1.jpg", "https://example.com/casa-del-mar/2.jpg"],
+  "reviews": [
+    "Absolutely stunning villa. The pool and sea views were everything we hoped for and the kitchen had everything we needed to cook for the whole family.",
+    "Spotlessly clean and the terrace is incredible at sunset. The walk down to the cove takes about ten minutes. We'll be back.",
+    "Perfect for our group of eight. Plenty of space, great BBQ evenings, and the host was very responsive."
+  ],
+  "num_of_reviews": 47,
+  "average_review_score": 4.96,
+  "rental_info": {
+    "max_guests": 8,
+    "bedrooms": 4,
+    "bathrooms": 3
+  },
+  "location": {
+    "city": "Begur",
+    "country": "Spain",
+    "latitude": 41.9542,
+    "longitude": 3.2076
+  },
+  "policies": {
+    "cancellation_policy": "Full refund if cancelled at least 30 days before check-in; 50% refund up to 14 days before.",
+    "payment_schedule": "30% deposit at booking, balance due 30 days before arrival.",
+    "damage_deposit": "€500, refunded within 7 days of checkout."
+  },
+  "house_rules": {
+    "check_in_time": "4 PM",
+    "check_out_time": "10 AM"
+  }
+}

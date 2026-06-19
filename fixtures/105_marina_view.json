@@ -1,0 +1,38 @@
+{
+  "property_id": 105,
+  "property_name": "Marina View Apartment",
+  "property_type": "NormalApartment",
+  "description": {
+    "name": "Marina View Apartment",
+    "headline": "Award-winning marina apartment, voted best in Valencia",
+    "description": "<div><p><strong>The #1 rated apartment in the whole city!</strong> Our <em>award-winning</em> interior design has been featured in major magazines. Enjoy a free welcome bottle of champagne and complimentary airport pickup on every stay.</p><p>Two bedrooms and two bathrooms overlook the marina, with a balcony for watching the boats. Walk to the beach in five minutes.</p></div>"
+  },
+  "amenities": ["WiFi", "AirConditioning", "Kitchen", "SeaView", "Balcony", "Elevator", "FreeParking"],
+  "image_urls": ["https://example.com/marina-view/1.jpg", "https://example.com/marina-view/2.jpg"],
+  "reviews": [
+    "Lovely views over the marina and very close to the beach. The balcony was our favourite spot.",
+    "Comfortable two-bed apartment, clean and well located. Parking was handy."
+  ],
+  "num_of_reviews": 31,
+  "average_review_score": 4.85,
+  "rental_info": {
+    "max_guests": 5,
+    "bedrooms": 2,
+    "bathrooms": 2
+  },
+  "location": {
+    "city": "Valencia",
+    "country": "Spain",
+    "latitude": 39.4561,
+    "longitude": -0.3286
+  },
+  "policies": {
+    "cancellation_policy": null,
+    "payment_schedule": null,
+    "damage_deposit": null
+  },
+  "house_rules": {
+    "check_in_time": "4 PM",
+    "check_out_time": "11 AM"
+  }
+}

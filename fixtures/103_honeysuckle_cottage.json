@@ -1,0 +1,37 @@
+{
+  "property_id": 103,
+  "property_name": "Honeysuckle Cottage",
+  "property_type": "Cottage",
+  "description": {
+    "name": "Honeysuckle Cottage",
+    "headline": "Stone cottage with a wood fire near Hay-on-Wye",
+    "description": "<p>A snug two-bedroom stone cottage on the edge of the Black Mountains, ten minutes from the bookshops of Hay-on-Wye. Curl up by the wood-burning fireplace after a day of walking, or take breakfast in the enclosed garden. Dogs are welcome.</p>"
+  },
+  "amenities": ["Fireplace", "Garden", "Heating", "Kitchen", "FreeParking", "PetFriendly"],
+  "image_urls": ["https://example.com/honeysuckle/1.jpg"],
+  "reviews": [
+    "A proper countryside retreat. The fire was wonderful in the evenings and our dog loved the garden. Very peaceful."
+  ],
+  "num_of_reviews": 1,
+  "average_review_score": 5.0,
+  "rental_info": {
+    "max_guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  },
+  "location": {
+    "city": "Hay-on-Wye",
+    "country": "United Kingdom",
+    "latitude": 52.0758,
+    "longitude": -3.1267
+  },
+  "policies": {
+    "cancellation_policy": null,
+    "payment_schedule": "Full payment due 14 days before arrival.",
+    "damage_deposit": null
+  },
+  "house_rules": {
+    "check_in_time": "4 PM",
+    "check_out_time": "10 AM"
+  }
+}

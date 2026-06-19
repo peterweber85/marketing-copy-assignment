@@ -1,0 +1,38 @@
+{
+  "property_id": 104,
+  "property_name": "Sunny Central Studio",
+  "property_type": "NormalApartment",
+  "description": {
+    "name": "Sunny Central Studio",
+    "headline": "Spacious 2-Bedroom Apartment in the Heart of Lisbon!",
+    "description": "<p>Stay in the middle of everything! This bright, cozy studio is perfect for a couple exploring Lisbon. The compact layout makes the most of every corner, with a kitchenette and a comfortable double sofa bed. Steps from Rossio square, trams and tascas.</p>"
+  },
+  "amenities": ["WiFi", "AirConditioning", "Kitchen", "TV"],
+  "image_urls": ["https://example.com/sunny-studio/1.jpg"],
+  "reviews": [
+    "Great location, you can walk everywhere. The studio is small and a bit tight for luggage but has everything two people need for a few nights.",
+    "Compact but well laid out and very central. Note it's a studio, not separate bedrooms, despite the listing title."
+  ],
+  "num_of_reviews": 15,
+  "average_review_score": 4.5,
+  "rental_info": {
+    "max_guests": 2,
+    "bedrooms": 0,
+    "bathrooms": 1
+  },
+  "location": {
+    "city": "Lisbon",
+    "country": "Portugal",
+    "latitude": 38.7139,
+    "longitude": -9.1394
+  },
+  "policies": {
+    "cancellation_policy": "Free cancellation up to 5 days before check-in.",
+    "payment_schedule": "Full payment due at booking.",
+    "damage_deposit": "€150, refunded within 7 days of checkout."
+  },
+  "house_rules": {
+    "check_in_time": "3 PM",
+    "check_out_time": "11 AM"
+  }
+}

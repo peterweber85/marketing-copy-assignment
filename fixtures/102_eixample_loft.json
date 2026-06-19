@@ -1,0 +1,39 @@
+{
+  "property_id": 102,
+  "property_name": "Eixample Modernista Loft",
+  "property_type": "NormalApartment",
+  "description": {
+    "name": "Eixample Modernista Loft",
+    "headline": "Bright designer loft in the heart of the Eixample",
+    "description": "<div class=\"listing\"><h2>A calm base in central Barcelona</h2><p>This second-floor loft sits on a quiet stretch of the Eixample, a short walk from Passeig de Gr&agrave;cia. High ceilings and tall windows fill the two bedrooms and open living space with light.</p><ul><li>Dedicated workspace with fast Wi-Fi</li><li>Elevator access</li><li>Air conditioning throughout</li></ul><p>Metro, cafes and the Sagrada Fam&iacute;lia are all within easy reach.</p></div>"
+  },
+  "amenities": ["WiFi", "AirConditioning", "Heating", "Kitchen", "Workspace", "Elevator", "TV", "CoffeeMaker", "Balcony"],
+  "image_urls": ["https://example.com/eixample-loft/1.jpg"],
+  "reviews": [
+    "Great location and very quiet for such a central spot. The workspace was perfect for a few days of remote work.",
+    "Lovely light-filled apartment, spotless, and the elevator is a real plus with luggage. Recommended.",
+    "Comfortable for the four of us. Close to the metro and plenty of restaurants nearby."
+  ],
+  "num_of_reviews": 23,
+  "average_review_score": 4.78,
+  "rental_info": {
+    "max_guests": 4,
+    "bedrooms": 2,
+    "bathrooms": 1
+  },
+  "location": {
+    "city": "Barcelona",
+    "country": "Spain",
+    "latitude": 41.3917,
+    "longitude": 2.1649
+  },
+  "policies": {
+    "cancellation_policy": "Free cancellation up to 7 days before check-in.",
+    "payment_schedule": "Full payment due at booking.",
+    "damage_deposit": null
+  },
+  "house_rules": {
+    "check_in_time": "3 PM",
+    "check_out_time": "11 AM"
+  }
+}
