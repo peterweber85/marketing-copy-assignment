@@ -22,7 +22,7 @@ Each maps to one or more scorers:
 
 | Scorer | Type | Scale | Axis | What it catches |
 |---|---|---|---|---|
-| `grounding_scorer` | Rule-based, offline | 0–1 | Grounding | Wrong bedroom/bathroom counts; studio claimed as N-bedroom; invented amenity codes; null policies mentioned; social proof with zero reviews; high-rating claims below the actual score; pet-friendly without the amenity; flexible check-in against a fixed time (9 deterministic checks) |
+| `grounding_scorer` | Rule-based, offline | 0–1 | Grounding | Wrong bedroom/bathroom counts; studio claimed as N-bedroom; invented amenity codes; null policies mentioned; social proof with zero reviews; high-rating claims below the actual score; pet-friendly without the amenity; flexible check-in against a fixed time (9 checks for standard properties, 10 for studios) |
 | `faithfulness_scorer` | LLM-as-judge (Sonnet), calibrated | 1–5 | Factuality | Unsupported claims; embellishments; awards/attributes not in the data |
 | `completeness_scorer` | Rule-based, offline | 0–1 | User impact | Amenity coverage (fraction of amenities actually described) + premium salience (is the pool/sea-view/hot-tub surfaced in the headline/highlights, not buried?) |
 | `booking_intent_scorer` | LLM-as-judge (Sonnet) | 1–5 | User impact | Would a guest click "Request to Book"? Persuasiveness / conversion potential, distinct from "well-written" |
@@ -79,7 +79,7 @@ faithfulness.
 **Robustness arc (v4 → v5).** `reliability_eval` (3 epochs/fixture, 27 samples) exposed that
 fixture 109 (Ático Dorado — owner headline claims "flexible check-in any time" but
 house_rules sets a fixed 7 PM) made `grounding_scorer` *non-deterministic*: **v4 grounding
-std = 0.021** (the model sometimes echoed the owner's false claim). Fix: `scrub_checkin_prose()`
+std = 0.064** (the model sometimes echoed the owner's false claim). Fix: `scrub_checkin_prose()`
 removes the contradictory owner sentence before the model sees it, and v5 gives prescriptive
 wording. Result: **v5 grounding std = 0.000** — the failure became impossible, not just
 rarer. This is the robustness axis the JD asks for: not just "is it right once" but "is it
@@ -146,7 +146,8 @@ generator exists — the AI equivalent of watching a test fail first.
 ## Repository structure
 
 ```
-evals.py            ← the deliverable: Marimo notebook running the full pipeline + evals
+evals.py            ← the deliverable: Marimo notebook (source of truth)
+evals.ipynb         Jupyter export of evals.py (generated; regenerate with: marimo export ipynb evals.py -o evals.ipynb)
 eval_pipeline.py    inspect-ai task definitions: stub_eval, listing_eval, reliability_eval, golden_eval
 lodgify/
   models.py         Pydantic input (PropertyInput) + output (ListingCopy) schemas
@@ -188,13 +189,19 @@ uv run pytest tests/ -v          # 46 tests
 
 **Open the notebook (the main deliverable):**
 ```bash
-uv run marimo edit evals.py      # interactive
-# or, read-only:
-uv run marimo run evals.py
+uv run marimo edit evals.py      # interactive (Marimo — recommended)
+uv run marimo run evals.py       # read-only Marimo
+# or open the static Jupyter export directly in any Jupyter environment:
+jupyter lab evals.ipynb
 ```
 The notebook reads the committed `.eval` logs, so the EDD arc, reliability, and calibration
 sections render **without an API key**. One cell generates live copy with Haiku for a single
 fixture *if* a key is present, and is skipped otherwise.
+
+**Regenerate the Jupyter export after editing `evals.py`:**
+```bash
+uv run marimo export ipynb evals.py -o evals.ipynb --include-outputs
+```
 
 **View the committed eval results (offline, no API key):**
 ```bash
@@ -235,7 +242,7 @@ Key runs to compare:
 | `stub_eval variant=bad` vs `good` | scorers discriminate bad (grounding 0.64, faith 1) from good (grounding 1.0) |
 | `listing_eval v1` vs `v2` | faithfulness jumps 2.89 → 4.11 (anti-embellishment fix) |
 | `listing_eval v2 → v3 → v4` | grounding climbs to 1.000 |
-| `reliability_eval v4` vs `v5` | grounding std 0.021 → 0.000 (fixture 109 robustness fix) |
+| `reliability_eval v4` vs `v5` | grounding std 0.064 → 0.000 (fixture 109 robustness fix) |
 | `golden_eval` (uncalibrated vs calibrated) | faithfulness MAD 1.22 → 0.94; good avg 3.67 vs bad avg 1.44 |
 
 All committed logs carry the full five scorers, except the **uncalibrated `golden_eval`

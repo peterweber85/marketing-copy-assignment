@@ -477,7 +477,7 @@ def _(glob, read_eval_log, statistics):
          "Grounding 0.989 → 1.000",
          "Owner headline 'Flexible Check-In Any Time!' echoed despite check_in_time='7 PM' (fixture 109)"),
         ("v4 → v5", "Grounding reliability",
-         "Grounding std ≈0.05 → 0.000 on fixture 109",
+         "Grounding std 0.064 → 0.000 on fixture 109",
          "v4 rule insufficient alone; v5 also scrubs check-in prose at ingest stage"),
     ]
 
@@ -746,7 +746,7 @@ def _(mo):
     - A lightweight prompt-editing UI where content/product managers propose changes (no Python)
     - Automated eval runs on proposed prompts against the golden set + recent prod samples
     - Side-by-side `inspect view` comparison of current vs proposed before/after metrics
-    - Auto-commit+deploy once a change passes the golden set (grounding 1.0, faithfulness MAD < 0.7)
+          
     This is the EDD loop operationalised: metrics drive every prompt change, nothing ships untested.
     """)
     return
@@ -833,7 +833,7 @@ def _(glob, read_eval_log, statistics):
     good_f_avg = round(statistics.mean(good_f_scores), 2) if good_f_scores else None
     bad_f_avg = round(statistics.mean(bad_f_scores), 2) if bad_f_scores else None
 
-    return (calib_rows, faith_mad, qual_mad, good_f_avg, bad_f_avg, golden_log)
+    return calib_rows, faith_mad, qual_mad, good_f_avg, bad_f_avg, golden_log
 
 
 @app.cell
@@ -876,7 +876,13 @@ def _(mo, calib_rows, faith_mad, qual_mad, good_f_avg, bad_f_avg, golden_log):
                 kind="success" if (faith_mad and faith_mad < 1.0) else "warn",
             ),
         ])
-    return calib_display
+    return (calib_display,)
+
+
+@app.cell
+def _(calib_display):
+    calib_display
+    return
 
 
 if __name__ == "__main__":
