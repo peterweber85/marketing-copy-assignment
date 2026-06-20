@@ -83,8 +83,8 @@ outputs. The eval harness is [inspect-ai](https://inspect.aisi.org.uk/).
 
 ### Five evaluation dimensions
 
-The job description names four axes — **factuality, grounding, robustness, user impact**.
-Each maps to one or more scorers:
+Each evaluation dimension maps to one or more of
+— **factuality, grounding, robustness, user impact**:
 
 | Scorer | Type | Scale | Axis | What it catches |
 |---|---|---|---|---|
